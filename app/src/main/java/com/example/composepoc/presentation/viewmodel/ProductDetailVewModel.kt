@@ -4,21 +4,46 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.composepoc.Utils.SharedEventBus
+import com.example.composepoc.Utils.SharedUiEvent
 import com.example.composepoc.core.common.UiState
 import com.example.composepoc.domain.usecase.GetProductDetailUseCase
 import com.example.composepoc.presentation.state.ProductDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductDetailVewModel @Inject constructor(private val productDetailUseCase: GetProductDetailUseCase) : ViewModel() {
+class ProductDetailVewModel @Inject constructor(private val productDetailUseCase: GetProductDetailUseCase,
+                                                private val sharedEventBus: SharedEventBus
+) : ViewModel() {
 
 
     private val _productDetail = mutableStateOf(ProductDetailState())
     val productDetail : State<ProductDetailState> get() = _productDetail
 
+    init {
+        observeSharedEvent()
+    }
+
+    private fun observeSharedEvent(){
+        viewModelScope.launch {
+          sharedEventBus.events.collectLatest {  event ->
+              when (event) {
+                  is SharedUiEvent.ShowMessage -> {
+                      println("abc ${event.message}")
+                  }
+                  SharedUiEvent.RefreshData -> {
+                       println("abc")
+                  }
+              }
+
+          }
+        }
+    }
 
     fun getProductDetailAPi(id : String){
         productDetailUseCase.invoke(id).onEach {
