@@ -23,7 +23,7 @@ data class GmwUiInterstitialModel(
     val gmwInterruptCloseAccess: String,
     val gmwInterruptButtonTitle: String,
     val gmwInterruptButtonAccess: String,
-    val title: String,
+    val title: String ="Welcome to My GMW",
     val imageAccessLabel: String,
     val iconAccessLabel: String,
     val skipButtonLabel: String,
