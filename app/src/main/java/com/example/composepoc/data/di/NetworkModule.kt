@@ -1,10 +1,9 @@
 package com.example.composepoc.data.di
 
-import com.example.composepoc.Utils.Constant.BASE_URL
+import com.example.composepoc.utils.Constant.BASE_URL
 import com.example.composepoc.data.netwotk.ApiService
 import com.example.composepoc.data.respository.RepositoryImpl
 import com.example.composepoc.domain.repository.Repository
-import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

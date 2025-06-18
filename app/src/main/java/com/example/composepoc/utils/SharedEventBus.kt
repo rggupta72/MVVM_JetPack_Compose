@@ -1,4 +1,4 @@
-package com.example.composepoc.Utils
+package com.example.composepoc.utils
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
