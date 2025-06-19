@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--  ~ Copyright (c) 2025 Kaiser Permanente. All rights reserved.  -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="itemState"
+            type="com.example.composepoc.adapter.HealthNeedItemViewState" />
+
+        <variable
+            name="viewModel"
+            type="com.example.composepoc.presentation.viewmodel.ProductListVewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@{itemState.ada}"
+        android:gravity="top"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@{itemState.label}" />
+    </LinearLayout>
+</layout>
