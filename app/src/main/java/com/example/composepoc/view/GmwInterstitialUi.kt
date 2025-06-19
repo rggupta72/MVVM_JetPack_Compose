@@ -283,7 +283,7 @@ fun GmwInterstitialUi(
                                         Spacer(modifier = Modifier.height(S_VERTICAL_SPACING))
                                         Row {
                                             Text(
-                                                text = "Refresh Button",
+                                                text = "Refresh Welcome Steps",
                                                 style = GmwPcdTypography.bodySmall,
                                                 color = Blue,
                                                 modifier = Modifier
