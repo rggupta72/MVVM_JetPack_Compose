@@ -19,24 +19,54 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberAsyncImagePainter
 import com.example.composepoc.domain.model.ProductItem
 
 
 @Composable
-fun listItem(category: ProductItem, onItemClick : (ProductItem) -> Unit) {
-    Card (modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp).clickable {
+fun listItem(category: ProductItem, onItemClick: (ProductItem) -> Unit) {
+    Card(modifier = Modifier
+        .fillMaxWidth()
+        .padding(8.dp)
+        .clickable {
             onItemClick(category)
         }) {
+        ConstraintLayout {
+
+            val (img, userDesc) = createRefs()
+
             Image(
-                modifier = Modifier.size(200.dp).padding(8.dp).weight(0.4f),
+                modifier = Modifier
+                    .constrainAs(img) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(userDesc.start)
+                        bottom.linkTo(parent.bottom)
+                        width = Dimension.fillToConstraints
+                        horizontalChainWeight = 0.4f
+                    }
+                    .size(200.dp)
+                    .padding(8.dp),
                 painter = rememberAsyncImagePainter(category.image),
                 contentDescription = ""
             )
-            userDescription(category, Modifier.weight(0.6f))
+            userDescription(category, Modifier
+                .constrainAs(userDesc) {
+                    top.linkTo(img.top)
+                    end.linkTo(parent.end)
+                    start.linkTo(img.end)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                    horizontalChainWeight = 0.6f
+                }
+            )
+
+            Spacer(modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp))
         }
-        Spacer(modifier = Modifier.fillMaxWidth().height(1.dp))
     }
 }
 
