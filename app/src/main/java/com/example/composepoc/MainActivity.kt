@@ -1,5 +1,6 @@
 package com.example.composepoc
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,9 +22,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    listingScreen()
+                    listingScreen(
+                        onClick = {
+                            launchHealthNeeds()
+                        }
+                    )
                 }
             }
         }
+    }
+
+    private fun launchHealthNeeds(){
+        val intent = Intent(this,HealthNeedsActivity::class.java)
+        startActivity(intent)
     }
 }

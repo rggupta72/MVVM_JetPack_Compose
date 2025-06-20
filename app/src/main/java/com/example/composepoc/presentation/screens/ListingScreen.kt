@@ -15,13 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.motion.widget.MotionScene.Transition.TransitionOnClick
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composepoc.presentation.screens.component.listItem
 import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 
-@Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun listingScreen (){
+fun listingScreen (
+    onClick:() -> Unit
+){
 
     val viewModel : ProductListVewModel = hiltViewModel()
     val context  = LocalContext.current
@@ -41,6 +43,7 @@ fun listingScreen (){
             LazyColumn {
                 items(it){ item->
                     listItem(item){product->
+                        onClick()
                         Toast.makeText(context,product.title,Toast.LENGTH_SHORT).show()
                     }
                 }
