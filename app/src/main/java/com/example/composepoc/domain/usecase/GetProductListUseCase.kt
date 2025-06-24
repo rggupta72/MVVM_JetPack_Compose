@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class GetProductListUseCase @Inject constructor(private val repositoryImpl : RepositoryImpl)  {
 
-    operator fun invoke() : Flow<UiState<List<ProductItem>>> = flow {
+     fun invoke() : Flow<UiState<List<ProductItem>>> = flow {
         emit(UiState.Loading())
         try {
             emit(UiState.Success(data = repositoryImpl.getProductList()))

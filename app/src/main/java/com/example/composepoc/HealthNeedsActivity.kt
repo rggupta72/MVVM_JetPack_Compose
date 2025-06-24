@@ -2,6 +2,8 @@ package com.example.composepoc
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -25,6 +27,7 @@ class HealthNeedsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_health_needs)
+        Log.d("Tester", intent.getStringExtra("Key").toString())
         binding.lifecycleOwner = this@HealthNeedsActivity
         binding.recyclerView.layoutManager = LinearLayoutManager(this@HealthNeedsActivity)
         healthNeedsAdapter = GmwHealthNeedsAdapter(productListVewModel)
