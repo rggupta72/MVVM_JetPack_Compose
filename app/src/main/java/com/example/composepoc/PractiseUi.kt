@@ -1,18 +1,23 @@
 package com.example.composepoc
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -31,15 +36,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import com.example.composepoc.domain.model.DummyArray
 import com.example.composepoc.utils.S_ELEVATION
 
 @Composable
 internal fun dummyUi(
+    dummyArray: Array<DummyArray>,
     textClick: () -> Unit
 ) {
 //    val viewModelInternal = remember { viewModel }
@@ -57,9 +63,9 @@ internal fun dummyUi(
             modifier = Modifier
                 .constrainAs(text) {
                     top.linkTo(parent.top)
-                    bottom.linkTo(image.top)
                     end.linkTo(parent.end)
                     start.linkTo(parent.start)
+                    height = Dimension.fillToConstraints
                 }
                 .clickable {
                     textClick()
@@ -77,6 +83,7 @@ internal fun dummyUi(
                 top.linkTo(text.bottom)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
+                height = Dimension.fillToConstraints
             },
             painter = painterResource(R.drawable.ic_launcher_background),
             contentDescription = "Dummy Image",
@@ -92,6 +99,7 @@ internal fun dummyUi(
                     top.linkTo(image.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                    height = Dimension.fillToConstraints
                 }
                 .padding(10.dp)
                 .wrapContentSize(),
@@ -128,6 +136,7 @@ internal fun dummyUi(
                 top.linkTo(button.bottom)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
+                height = Dimension.fillToConstraints
             },
             value = state.value,
             onValueChange = {
@@ -141,8 +150,9 @@ internal fun dummyUi(
         Box(modifier = Modifier
             .constrainAs(box) {
                 top.linkTo(textField.bottom)
-                start.linkTo(textField.start)
-                end.linkTo(textField.end)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                height = Dimension.fillToConstraints
             }
             .padding(10.dp)) {
             Image(
@@ -160,26 +170,30 @@ internal fun dummyUi(
             )
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .constrainAs(lazyColumn) {
-                    top.linkTo(box.bottom)
-                    start.linkTo(box.start)
-                    end.linkTo(box.end)
-                },
-        ) {
-            items(6) {
-                listItem()
+        Column(modifier = Modifier
+            .constrainAs(lazyColumn) {
+                top.linkTo(box.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(parent.bottom)
+                height = Dimension.fillToConstraints
             }
+        ) {
+
+            LazyColumn {
+                items(dummyArray) { dummyArrayItem ->
+                    listItem(dummyArrayItem)
+                }
+            }
+
         }
 
 
     }
 }
 
-@Preview
 @Composable
-private fun listItem() {
+private fun listItem(dummyArray: DummyArray) {
 
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = S_ELEVATION),
@@ -188,27 +202,39 @@ private fun listItem() {
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
         ) {
 
             Image(
-                painter = painterResource(R.drawable.job_24),
+                imageVector = Icons.Outlined.Favorite,
                 contentDescription = "",
                 modifier = Modifier
                     .size(40.dp)
                     .padding(8.dp)
+                    .weight(.2f)
             )
 
             Column(
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(.8f)
             ) {
                 Text(
-                    "Heading",
+                    text = dummyArray.name,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold
                 )
+                // divider
+                Box(
+                    modifier = Modifier
+                        .background(Color(0xFFEEEEEE))
+                        .fillMaxWidth(0.4f)
+                        .height(2.dp)
+                )
                 Text(
-                    "Description",
+                    dummyArray.bio,
                     color = Color.Gray
                 )
             }
