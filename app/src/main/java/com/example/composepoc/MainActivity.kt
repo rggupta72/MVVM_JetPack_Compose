@@ -9,8 +9,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.example.composepoc.domain.DataManager
+import com.example.composepoc.domain.Page
+import com.example.composepoc.screens.listingScreen
 import com.example.composepoc.ui.theme.ComposePOCTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -18,27 +23,43 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val composeView = findViewById<ComposeView>(R.id.compose_view)
-        DataManager.loadAssetFromFile(this)
+        // background thread
+        CoroutineScope(Dispatchers.IO).launch {
+            DataManager.loadAssetFromFile(applicationContext)
+        }
         composeView.setContent {
             ComposePOCTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    dummyUi(dummyArray = DataManager.data,
 
-                        textClick = {
-                            launchHealthNeeds()
+                    // because of state used this will update on main thread
+                    if (DataManager.isDataLoad.value) {
+                        if (DataManager.currentPage.value == Page.DASHBOARD) {
+                            listingScreen(
+                                onClick = {
+                                    DataManager.switchPages()
+                                }
+                            )
+
+                        } else {
+                            dummyUi(dummyArray = DataManager.data,
+                                textClick = { count ->
+                                    launchHealthNeeds(count)
+                                }
+                            )
                         }
-                    )
+                    }
+
                 }
             }
         }
     }
 
-    private fun launchHealthNeeds() {
+    private fun launchHealthNeeds(count: Int) {
         val intent = Intent(this, HealthNeedsActivity::class.java)
-        intent.putExtra("Key", "Value")
+        intent.putExtra("Key", count.toString())
         startActivity(intent)
     }
 

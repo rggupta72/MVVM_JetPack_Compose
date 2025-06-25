@@ -1,5 +1,6 @@
 package com.example.composepoc
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,19 +41,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.example.composepoc.domain.DataManager
 import com.example.composepoc.domain.model.DummyArray
 import com.example.composepoc.utils.S_ELEVATION
 
 @Composable
 internal fun dummyUi(
     dummyArray: Array<DummyArray>,
-    textClick: () -> Unit
+    textClick: (abc: Int) -> Unit
 ) {
 //    val viewModelInternal = remember { viewModel }
 //    val isLoading = remember { mutableStateOf(true) }
 //    val gmwTaskItem by viewModelInternal.gmwList.collectAsStateWithLifecycle()
 //    val gmwErrorStatus by viewModelInternal.gmwError.collectAsStateWithLifecycle()
 //    val gmwRetryState by viewModelInternal.gmwRetryState.collectAsStateWithLifecycle()
+    val abc = 5
+    BackHandler {
+        DataManager.switchPages()
+    }
     val scrollState = rememberScrollState()
     val state = remember { mutableStateOf("") }
     ConstraintLayout {
@@ -68,7 +74,7 @@ internal fun dummyUi(
                     height = Dimension.fillToConstraints
                 }
                 .clickable {
-                    textClick()
+                    textClick(abc)
                 },
             text = "I am tester",
             fontStyle = FontStyle.Italic,
@@ -92,7 +98,7 @@ internal fun dummyUi(
 
         Button(
             onClick = {
-                textClick()
+                textClick(abc)
             },
             modifier = Modifier
                 .constrainAs(button) {
