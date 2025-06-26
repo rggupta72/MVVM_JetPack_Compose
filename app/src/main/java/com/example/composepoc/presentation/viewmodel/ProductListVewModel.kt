@@ -15,6 +15,8 @@ import com.example.composepoc.domain.usecase.GetProductListUseCase
 import com.example.composepoc.presentation.state.HealthNeedsState
 import com.example.composepoc.presentation.state.ProductListState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -27,11 +29,11 @@ class ProductListVewModel @Inject constructor(
     private val sharedEventBus: SharedEventBus
 ) : ViewModel() {
 
-    private val _productList = mutableStateOf(ProductListState())
-    val productList: State<ProductListState> get() = _productList
+    private val _productList = MutableStateFlow(ProductListState())
+    val productList: StateFlow<ProductListState> get() = _productList
 
-    private val _healthNeedsList = mutableStateOf(HealthNeedsState())
-    val healthNeedsList: State<HealthNeedsState> get() = _healthNeedsList
+    private val _healthNeedsList = MutableStateFlow(HealthNeedsState())
+    val healthNeedsList: StateFlow<HealthNeedsState> get() = _healthNeedsList
 
     init {
         productListUseCase.invoke().onEach {

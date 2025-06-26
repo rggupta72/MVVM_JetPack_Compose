@@ -10,8 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import com.example.composepoc.domain.DataManager
 import com.example.composepoc.domain.Page
-import com.example.composepoc.screens.listingScreen
-import com.example.composepoc.ui.theme.ComposePOCTheme
+import com.example.composepoc.view.listingScreen
+import com.example.composepoc.view.dummyUi
+import com.example.composepoc.view.theme.ComposePOCTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

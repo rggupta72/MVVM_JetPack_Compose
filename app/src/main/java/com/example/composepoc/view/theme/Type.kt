@@ -1,4 +1,4 @@
-package com.example.composepoc.ui.theme
+package com.example.composepoc.view.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

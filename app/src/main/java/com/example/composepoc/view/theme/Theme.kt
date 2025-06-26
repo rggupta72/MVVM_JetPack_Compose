@@ -1,4 +1,4 @@
-package com.example.composepoc.ui.theme
+package com.example.composepoc.view.theme
 
 import android.app.Activity
 import android.os.Build

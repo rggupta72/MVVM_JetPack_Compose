@@ -1,5 +1,6 @@
-package com.example.composepoc
+package com.example.composepoc.view
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,8 +27,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,9 +45,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.example.composepoc.R
 import com.example.composepoc.domain.DataManager
 import com.example.composepoc.domain.model.DummyArray
 import com.example.composepoc.utils.S_ELEVATION
+import kotlinx.coroutines.delay
 
 @Composable
 internal fun dummyUi(
@@ -61,6 +67,7 @@ internal fun dummyUi(
     }
     val scrollState = rememberScrollState()
     val state = remember { mutableStateOf("") }
+    var state1 = remember { mutableStateOf(::a) }
     ConstraintLayout {
 
         val (text, image, button, textField, box, lazyColumn) = createRefs()
@@ -85,16 +92,20 @@ internal fun dummyUi(
         )
 
         Image(
-            modifier = Modifier.constrainAs(image) {
-                top.linkTo(text.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                height = Dimension.fillToConstraints
-            },
+            modifier = Modifier
+                .constrainAs(image) {
+                    top.linkTo(text.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    height = Dimension.fillToConstraints
+                }
+                .clickable { state1.value = ::b },
             painter = painterResource(R.drawable.ic_launcher_background),
             contentDescription = "Dummy Image",
-            colorFilter = ColorFilter.tint(Color.Red)
-        )
+            colorFilter = ColorFilter.tint(Color.Red),
+
+
+            )
 
         Button(
             onClick = {
@@ -196,6 +207,7 @@ internal fun dummyUi(
 
 
     }
+    landingScreen(state1.value)
 }
 
 @Composable
@@ -247,6 +259,24 @@ private fun listItem(dummyArray: DummyArray) {
 
         }
 
+    }
+
+}
+
+fun a() {
+    Log.d("Demo", "The Value of A is ${5.toString()}")
+}
+
+fun b() {
+    Log.d("Demo", "The Value of B is ${10.toString()}")
+}
+
+@Composable
+fun landingScreen(onTimeOut: () -> Unit) {
+    val currentOnTimeout by rememberUpdatedState(onTimeOut)
+    LaunchedEffect(true) {
+        delay(5000)
+        currentOnTimeout()
     }
 
 }
