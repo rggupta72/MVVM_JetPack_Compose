@@ -45,15 +45,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composepoc.R
 import com.example.composepoc.domain.DataManager
 import com.example.composepoc.domain.model.DummyArray
+import com.example.composepoc.presentation.viewmodel.DummyArrayViewModel
 import com.example.composepoc.utils.S_ELEVATION
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 
 @Composable
 internal fun dummyUi(
-    dummyArray: Array<DummyArray>,
+    array: Array<DummyArray>,
     textClick: (abc: Int) -> Unit
 ) {
 //    val viewModelInternal = remember { viewModel }
@@ -65,6 +68,7 @@ internal fun dummyUi(
     BackHandler {
         DataManager.switchPages()
     }
+    val dummyArrayViewModel: DummyArrayViewModel = hiltViewModel()
     val scrollState = rememberScrollState()
     val state = remember { mutableStateOf("") }
     var state1 = remember { mutableStateOf(::a) }
@@ -198,7 +202,7 @@ internal fun dummyUi(
         ) {
 
             LazyColumn {
-                items(dummyArray) { dummyArrayItem ->
+                items(array) { dummyArrayItem ->
                     listItem(dummyArrayItem)
                 }
             }
