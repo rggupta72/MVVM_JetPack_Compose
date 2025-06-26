@@ -8,20 +8,44 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.composepoc.core.common.NavigationEvent
+import com.example.composepoc.presentation.viewmodel.DummyArrayViewModel
+import jakarta.inject.Inject
 
 class NavGraph : ComponentActivity() {
 
+    @Inject
+    lateinit var dummyArrayViewModel: DummyArrayViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+        setContent()
+        {
             NavController()
         }
+
+//        dummyArrayViewModel.productListVewModel.observe(this) {
+//            it.getContentIfNotHandled()?.let { navigation ->
+//                when (navigation) {
+//
+//                    is NavigationEvent.XyzNavigation -> {
+//
+//                    }
+//
+//                    else -> {
+//
+//                    }
+//
+//                }
+//            }
+//        }
+
+
     }
 }
 
