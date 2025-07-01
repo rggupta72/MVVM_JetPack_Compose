@@ -1,22 +1,18 @@
 package com.example.composepoc.presentation.viewmodel
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composepoc.adapter.BaseRecyclerViewItemState
 import com.example.composepoc.adapter.HealthNeedItemViewState
-import com.example.composepoc.adapter.HealthNeedsViewType
 import com.example.composepoc.adapter.getGmwHubViewStateList
-import com.example.composepoc.utils.SharedEventBus
-import com.example.composepoc.utils.SharedUiEvent
 import com.example.composepoc.core.common.UiState
 import com.example.composepoc.domain.usecase.GetProductListUseCase
 import com.example.composepoc.presentation.state.HealthNeedsState
 import com.example.composepoc.presentation.state.ProductListState
+import com.example.composepoc.utils.SharedEventBus
+import com.example.composepoc.utils.SharedUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -30,10 +26,10 @@ class ProductListVewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _productList = MutableStateFlow(ProductListState())
-    val productList: StateFlow<ProductListState> get() = _productList
+    val productList = _productList.asStateFlow()
 
     private val _healthNeedsList = MutableStateFlow(HealthNeedsState())
-    val healthNeedsList: StateFlow<HealthNeedsState> get() = _healthNeedsList
+    val healthNeedsList = _healthNeedsList.asStateFlow()
 
     init {
         productListUseCase.invoke().onEach {

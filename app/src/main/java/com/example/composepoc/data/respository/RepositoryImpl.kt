@@ -19,4 +19,8 @@ class RepositoryImpl @Inject constructor(private val apiService: ApiService) : R
         return apiService.getProductDetailsAPI(id).toProductDetail()
     }
 
+    override fun getProductList1(): List<ProductItem> {
+        return apiService.getAllProductListAPI1().map { it.toProductList() }
+    }
+
 }

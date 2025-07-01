@@ -10,6 +10,8 @@ import com.example.composepoc.core.common.UiState
 import com.example.composepoc.domain.usecase.GetProductDetailUseCase
 import com.example.composepoc.presentation.state.ProductDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

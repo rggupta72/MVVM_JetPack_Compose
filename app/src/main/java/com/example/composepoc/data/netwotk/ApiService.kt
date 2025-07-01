@@ -9,6 +9,9 @@ interface ApiService {
     @GET("/products")
     suspend fun getAllProductListAPI() : List<ProductListDTO>
 
+    @GET("/products")
+    fun getAllProductListAPI1() : List<ProductListDTO>
+
     @GET("/products/{Id}")
     suspend fun getProductDetailsAPI(@Path("Id") id : String) : ProductListDTO
 

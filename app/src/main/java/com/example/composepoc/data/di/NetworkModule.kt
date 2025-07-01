@@ -19,7 +19,7 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providerRetrofit() : Retrofit{
+    fun providerRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -28,14 +28,13 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun providerApiService(retrofit: Retrofit) : ApiService {
+    fun providerApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun providerRepositoryImpl(apiService: ApiService) : Repository {
+    fun providerRepositoryImpl(apiService: ApiService): Repository {
         return RepositoryImpl(apiService)
     }
-
 }

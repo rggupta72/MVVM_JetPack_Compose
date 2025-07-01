@@ -4,8 +4,9 @@ package com.example.composepoc
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.background
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,27 +21,50 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.composepoc.domain.DataManager
+import com.example.composepoc.presentation.viewmodel.ProductEvent
+import com.example.composepoc.presentation.viewmodel.ProductListVewModel
+import com.example.composepoc.presentation.viewmodel.ProductListViewModelCoroutine
 import com.example.composepoc.view.listingScreen
 import com.example.composepoc.view.dummyUi
 import com.example.composepoc.view.theme.ComposePOCTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val productDetailVewModel: ProductListVewModel by viewModels()
+    private val productListViewModelCoroutine: ProductListViewModelCoroutine by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val composeView = findViewById<ComposeView>(R.id.compose_view)
+        // Only traditional method work
+
         // background thread
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // This block will be executed when the lifecycle is AT LEAST STARTED.
+                // It will be cancelled when the lifecycle is STOPPED.
+                // It will restart if the lifecycle moves from STOPPED to STARTED again.
+                productDetailVewModel.productList.collectLatest {
+                    Log.d("Flow data", it.data?.size.toString() ?: "")
+                }
+            }
+        }
         CoroutineScope(Dispatchers.IO).launch {
             DataManager.loadAssetFromFile(applicationContext)
         }
@@ -84,6 +108,27 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
+        }
+        productListViewModelCoroutine.getApiCalled()
+        initObserver()
+    }
+
+    private fun initObserver() {
+        productListViewModelCoroutine.uiEVENT.observe(this) { navigation ->
+            when (navigation) {
+                is ProductEvent.Loading -> {
+                    // to do
+                }
+
+                is ProductEvent.Success -> {
+                    // to do
+                }
+
+                is ProductEvent.Error -> {
+                    // to do
+                }
+            }
+
         }
     }
 

@@ -5,8 +5,9 @@ import com.example.composepoc.domain.model.ProductItem
 
 interface Repository {
 
-    suspend fun getProductList() : List<ProductItem>
+    suspend fun getProductList(): List<ProductItem>
+    fun getProductList1(): List<ProductItem>
 
-    suspend fun getProductDetail(id : String) : ProductDetail
+    suspend fun getProductDetail(id: String): ProductDetail
 
 }
