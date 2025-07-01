@@ -32,22 +32,24 @@ class ProductListVewModel @Inject constructor(
     val healthNeedsList = _healthNeedsList.asStateFlow()
 
     init {
-        productListUseCase.invoke().onEach {
-            when (it) {
-                is UiState.Loading -> {
-                    _productList.value = ProductListState(isLoading = true)
-                }
+        viewModelScope.launch {
+            productListUseCase.invoke().collectLatest {
+                when (it) {
+                    is UiState.Loading -> {
+                        _productList.value = ProductListState(isLoading = true)
+                    }
 
-                is UiState.Success -> {
-                    sharedEventBus.produceEvent(SharedUiEvent.ShowMessage("Event Trigger"))
-                    _productList.value = ProductListState(data = it.data)
-                }
+                    is UiState.Success -> {
+                        sharedEventBus.produceEvent(SharedUiEvent.ShowMessage("Event Trigger"))
+                        _productList.value = ProductListState(data = it.data)
+                    }
 
-                is UiState.Error -> {
-                    _productList.value = ProductListState(error = it.message.toString())
+                    is UiState.Error -> {
+                        _productList.value = ProductListState(error = it.message.toString())
+                    }
                 }
             }
-        }.launchIn(viewModelScope)
+        }
         observeSharedEvent()
     }
 
