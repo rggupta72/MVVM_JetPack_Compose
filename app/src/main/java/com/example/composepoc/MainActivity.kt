@@ -151,6 +151,7 @@ private fun navGraph() {
 
         composable(route = "practise1") {
             practise1 {
+                println(it)
                 navController.navigate("listingScreen")
             }
         }

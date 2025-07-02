@@ -15,15 +15,16 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -33,13 +34,13 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 
 @Composable
-fun practise1(onClick: () -> Unit) {
+fun practise1(onClick: (abc: String) -> Unit) {
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                onClick()
+                onClick("")
             }
             .border(6.dp, color = Color.Red)
             .border(6.dp, color = Color.Blue)
@@ -52,7 +53,8 @@ fun practise1(onClick: () -> Unit) {
                 .border(3.dp, Color.Blue)
         ) {
             ConstraintLayout {
-                val (text1, text2, image, button, tonalButton, elevatedButton, outlineButton, textButton) = createRefs()
+                val (text1, text2, image, button, tonalButton,
+                    elevatedButton, outlineButton, textButton, textField) = createRefs()
 
                 Text(
                     text = "Hi Message",
@@ -112,9 +114,13 @@ fun practise1(onClick: () -> Unit) {
                             top.linkTo(image.bottom)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
+                        }
+                        .semantics {
+                            contentDescription = ""
                         },
-                    onClick =
-                    onClick,
+                    onClick = {
+                        onClick("")
+                    },
                 ) {
                     Text(
                         "My Button", color = Color.White,
@@ -122,46 +128,85 @@ fun practise1(onClick: () -> Unit) {
                 }
 
                 FilledTonalButton(
-                    onClick = onClick,
+                    onClick = {
+                        onClick("")
+                    },
                     modifier = Modifier
                         .constrainAs(tonalButton) {
                             top.linkTo(button.bottom)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         }
+                        .semantics { contentDescription = "" }
                         .padding(10.dp),
                 ) {
                     Text("Filled Tonal Button", color = Color.White)
                 }
 
                 ElevatedButton(
-                    onClick = onClick,
+                    onClick = {
+                        onClick("")
+                    },
                     modifier = Modifier
                         .constrainAs(elevatedButton) {
                             top.linkTo(tonalButton.bottom)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         }
+                        .semantics { contentDescription = "" }
                         .padding(10.dp),
                 ) {
                     Text("Elevated Button", color = Color.White)
                 }
 
-                OutlinedButton(onClick = onClick, modifier = Modifier.constrainAs(outlineButton) {
-                    top.linkTo(elevatedButton.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }) {
+                OutlinedButton(onClick = {
+                    onClick("")
+                }, modifier = Modifier
+                    .constrainAs(outlineButton) {
+                        top.linkTo(elevatedButton.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .semantics { contentDescription = "" }) {
                     Text("Outline Text", color = Color.Black)
                 }
 
-                TextButton(onClick = onClick, modifier = Modifier.constrainAs(textButton) {
-                    top.linkTo(outlineButton.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }) {
+                TextButton(onClick = {
+                    onClick("")
+                }, modifier = Modifier
+                    .constrainAs(textButton) {
+                        top.linkTo(outlineButton.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .semantics { contentDescription = "" }) {
                     Text("Text Button", color = Color.Blue)
                 }
+
+                TextField(
+                    modifier = Modifier
+                        .constrainAs(textField) {
+                            top.linkTo(textButton.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                        .padding(10.dp)
+                        .semantics {
+                            contentDescription = ""
+                        },
+                    onValueChange = {
+                        onClick(it)
+                    },
+                    textStyle = TextStyle(Color.White),
+                    value = "Hi",
+                    placeholder = {
+                        Text(" Please Enter name")
+                    },
+                    label = {
+                        Text("Please Enter name")
+                    }
+
+                )
 
 
             }
