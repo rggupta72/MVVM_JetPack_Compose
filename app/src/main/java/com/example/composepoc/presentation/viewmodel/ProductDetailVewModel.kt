@@ -59,6 +59,10 @@ class ProductDetailVewModel @Inject constructor(private val productDetailUseCase
                 is UiState.Error->{
                     _productDetail.value = ProductDetailState(error = it.message.toString())
                 }
+
+                else -> {
+                    // to do
+                }
             }
         }.launchIn(viewModelScope)
     }

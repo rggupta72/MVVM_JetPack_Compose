@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -39,6 +40,7 @@ import com.example.composepoc.view.theme.ComposePOCTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -141,10 +143,18 @@ class MainActivity : ComponentActivity() {
 
 }
 
+@Preview(showBackground = true)
 @Composable
 private fun navGraph() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "listingScreen") {
+    NavHost(navController = navController, startDestination = "practise1") {
+
+        composable(route = "practise1") {
+            practise1 {
+                navController.navigate("listingScreen")
+            }
+        }
+
         composable(route = "listingScreen") {
             listingScreen() {
                 navController.navigate("dummyUi/${"tester"}")

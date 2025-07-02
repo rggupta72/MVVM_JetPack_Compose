@@ -11,6 +11,7 @@ import com.example.composepoc.presentation.state.ProductListState
 import com.example.composepoc.utils.SharedEventBus
 import com.example.composepoc.utils.SharedUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -32,7 +33,7 @@ class ProductListVewModel @Inject constructor(
     val healthNeedsList = _healthNeedsList.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Main) {
             productListUseCase.invoke().collectLatest {
                 when (it) {
                     is UiState.Loading -> {
