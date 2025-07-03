@@ -5,12 +5,19 @@ package com.example.composepoc
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -21,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -34,13 +42,13 @@ import com.example.composepoc.domain.DataManager
 import com.example.composepoc.presentation.viewmodel.ProductEvent
 import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 import com.example.composepoc.presentation.viewmodel.ProductListViewModelCoroutine
-import com.example.composepoc.view.listingScreen
 import com.example.composepoc.view.dummyUi
+import com.example.composepoc.view.listingScreen
+import com.example.composepoc.view.practise1
 import com.example.composepoc.view.theme.ComposePOCTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -99,9 +107,77 @@ class MainActivity : ComponentActivity() {
                             title = {
                                 Text("Testing App", color = Color.White)
                             },
-                            colors = TopAppBarDefaults.topAppBarColors(Color.Black),
+                            colors = TopAppBarDefaults.topAppBarColors(Color.Red),
+                            navigationIcon = {
+                                IconButton(
+                                    onClick = {
+                                        Toast.makeText(this, "Hi", Toast.LENGTH_SHORT).show()
+                                    },
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.baseline_format_list_bulleted_24),
+                                        contentDescription = ""
+                                    )
+                                }
+                            },
+                            actions = {
+                                IconButton(onClick = {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Setting",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.baseline_settings_24),
+                                        contentDescription = "Setting"
+                                    )
+                                }
+                            }
                         )
-                    }) {
+                    },
+                        bottomBar = {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                BottomAppBar(
+                                    contentColor = Color.White,
+                                    containerColor = Color.Blue
+                                ) {
+                                    IconButton(onClick = {
+                                        Toast.makeText(
+                                            this@MainActivity,
+                                            "Home",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                    }) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.baseline_home_24),
+                                            contentDescription = ""
+                                        )
+                                    }
+                                    IconButton(onClick = {
+                                        Toast.makeText(
+                                            this@MainActivity,
+                                            "Location",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+                                    }) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.baseline_fmd_good_24),
+                                            contentDescription = ""
+                                        )
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                    ) {
                         Box(modifier = Modifier.padding(it)) {
                             navGraph()
                         }
@@ -152,12 +228,21 @@ private fun navGraph() {
         composable(route = "practise1") {
             practise1 {
                 println(it)
-                navController.navigate("listingScreen")
+                navController.navigate("listingScreen/${"name"}${"password"}")
             }
         }
 
-        composable(route = "listingScreen") {
-            listingScreen() {
+        composable(route = "listingScreen/{name}/{password}", arguments = listOf(
+            navArgument("name") {
+                type = NavType.StringType
+            },
+            navArgument("password") {
+                type = NavType.StringType
+            }
+
+        )) {
+
+            listingScreen(it.arguments?.getString("name")?:"",it.arguments?.getString("password")?:"") {
                 navController.navigate("dummyUi/${"tester"}")
             }
         }

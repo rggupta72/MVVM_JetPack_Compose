@@ -47,11 +47,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composepoc.R
+import com.example.composepoc.a
+import com.example.composepoc.b
 import com.example.composepoc.domain.DataManager
 import com.example.composepoc.domain.model.DummyArray
 import com.example.composepoc.presentation.viewmodel.DummyArrayViewModel
 import com.example.composepoc.utils.S_ELEVATION
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 
 @Composable

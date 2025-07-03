@@ -21,6 +21,7 @@ import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 
 @Composable
 fun listingScreen(
+    name: String, password:String,
     onClick: () -> Unit
 ) {
 
