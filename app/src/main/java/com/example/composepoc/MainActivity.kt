@@ -222,25 +222,35 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 private fun navGraph() {
+    val name = "Raju"
+    val password = null
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "practise1") {
 
         composable(route = "practise1") {
             practise1 {
                 println(it)
-                navController.navigate("listingScreen/${"name"}")
+                navController.navigate("listingScreen/$name?password=$password")
             }
         }
 
         composable(
-            route = "listingScreen/{name}", arguments = listOf(
+            route = "listingScreen/{name}?password={password}", arguments = listOf(
                 navArgument("name") {
                     type = NavType.StringType
                 },
+                navArgument("password") {
+                    type = NavType.StringType
+                    defaultValue = "123456"
+                    nullable = true
+                }
             )
         ) {
 
-            listingScreen(it.arguments?.getString("name") ?: "") {
+            listingScreen(
+                it.arguments?.getString("name") ?: "",
+                it.arguments?.getString("password") ?: ""
+            ) {
                 navController.navigate("dummyUi/${"tester"}")
             }
         }
