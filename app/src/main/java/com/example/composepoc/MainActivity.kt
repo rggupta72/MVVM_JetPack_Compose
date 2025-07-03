@@ -232,15 +232,15 @@ private fun navGraph() {
             }
         }
 
-        composable(route = "listingScreen/{name}", arguments = listOf(
-            navArgument("name") {
-                type = NavType.StringType
-            },
+        composable(
+            route = "listingScreen/{name}", arguments = listOf(
+                navArgument("name") {
+                    type = NavType.StringType
+                },
+            )
+        ) {
 
-
-        )) {
-
-            listingScreen(it.arguments?.getString("name")?:"") {
+            listingScreen(it.arguments?.getString("name") ?: "") {
                 navController.navigate("dummyUi/${"tester"}")
             }
         }
