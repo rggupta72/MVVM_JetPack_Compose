@@ -228,21 +228,19 @@ private fun navGraph() {
         composable(route = "practise1") {
             practise1 {
                 println(it)
-                navController.navigate("listingScreen/${"name"}${"password"}")
+                navController.navigate("listingScreen/${"name"}")
             }
         }
 
-        composable(route = "listingScreen/{name}/{password}", arguments = listOf(
+        composable(route = "listingScreen/{name}", arguments = listOf(
             navArgument("name") {
                 type = NavType.StringType
             },
-            navArgument("password") {
-                type = NavType.StringType
-            }
+
 
         )) {
 
-            listingScreen(it.arguments?.getString("name")?:"",it.arguments?.getString("password")?:"") {
+            listingScreen(it.arguments?.getString("name")?:"") {
                 navController.navigate("dummyUi/${"tester"}")
             }
         }
