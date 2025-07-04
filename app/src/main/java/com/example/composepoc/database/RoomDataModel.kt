@@ -7,4 +7,6 @@ import androidx.room.PrimaryKey
 data class RoomDataModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val worker: String)
+    val worker: String,
+    val email: String = "Email Address"
+)
