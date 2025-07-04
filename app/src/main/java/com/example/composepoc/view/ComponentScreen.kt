@@ -64,7 +64,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                 onClick("")
             }
             .verticalScroll(rememberScrollState())
-            .scrollable(rememberScrollState(),Orientation.Vertical)
+            .scrollable(rememberScrollState(), Orientation.Vertical)
     )
     {
         Box(
@@ -77,16 +77,21 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     elevatedButton, outlineButton, textButton, textField, checkBox, switch,
                     radioGroup, progressBar, box, list) = createRefs()
 
+                // Guidelines: Helps you create consistent and adaptive
+                // layout by positioning element relative to a percentage or specific
+                // distance from the start or end of the parent
+
+                val startGuideline = createGuidelineFromStart(.15f)
+                val endGuideline = createGuidelineFromEnd(.15f)
+
                 Text(
                     text = "Hi Message",
                     color = Color.Black,
                     modifier = Modifier
                         .constrainAs(text1) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            top.linkTo(parent.top, margin = 10.dp)
+                            start.linkTo(startGuideline)
                             bottom.linkTo(text2.top)
-                            width = Dimension.matchParent
                         }
                         .padding(10.dp)
                         .semantics { heading() }
@@ -118,7 +123,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(image) {
                             top.linkTo(text2.bottom)
-                            start.linkTo(parent.start)
+                            start.linkTo(startGuideline)
                             end.linkTo(parent.end)
                             bottom.linkTo(button.top)
                         }
@@ -133,8 +138,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(button) {
                             top.linkTo(image.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            end.linkTo(endGuideline)
                         }
                         .semantics {
                             contentDescription = ""
@@ -155,8 +159,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(tonalButton) {
                             top.linkTo(button.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            end.linkTo(endGuideline)
                         }
                         .semantics { contentDescription = "" }
                         .padding(10.dp),
@@ -171,8 +174,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(elevatedButton) {
                             top.linkTo(tonalButton.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            start.linkTo(startGuideline)
                         }
                         .semantics { contentDescription = "" }
                         .padding(10.dp),
@@ -185,8 +187,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                 }, modifier = Modifier
                     .constrainAs(outlineButton) {
                         top.linkTo(elevatedButton.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
+                        end.linkTo(endGuideline)
                     }
                     .semantics { contentDescription = "" }) {
                     Text("Outline Text", color = Color.Black)
@@ -197,8 +198,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                 }, modifier = Modifier
                     .constrainAs(textButton) {
                         top.linkTo(outlineButton.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
+                        start.linkTo(startGuideline)
                     }
                     .semantics { contentDescription = "" }) {
                     Text("Text Button", color = Color.Blue)
@@ -208,8 +208,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(textField) {
                             top.linkTo(textButton.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            end.linkTo(endGuideline)
                         }
                         .padding(10.dp)
                         .semantics {
@@ -237,8 +236,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(checkBox) {
                             top.linkTo(textField.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            start.linkTo(startGuideline)
                         }
                         .semantics {
                             contentDescription = "Please check check box"
@@ -254,8 +252,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(switch) {
                             top.linkTo(checkBox.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            end.linkTo(endGuideline)
                         }
                         .padding(10.dp)
                         .semantics { contentDescription = "Please select switch" },
