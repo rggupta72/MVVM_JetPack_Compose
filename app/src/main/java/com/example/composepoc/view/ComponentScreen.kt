@@ -1,9 +1,8 @@
 package com.example.composepoc.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +19,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
@@ -46,9 +47,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.composepoc.R
+import com.example.composepoc.utils.Divider
 
 @Composable
 fun practise1(onClick: (abc: String) -> Unit) {
@@ -63,8 +66,6 @@ fun practise1(onClick: (abc: String) -> Unit) {
             .clickable {
                 onClick("")
             }
-            .verticalScroll(rememberScrollState())
-            .scrollable(rememberScrollState(), Orientation.Vertical)
     )
     {
         Box(
@@ -72,10 +73,17 @@ fun practise1(onClick: (abc: String) -> Unit) {
                 .fillMaxWidth()
                 .padding(10.dp)
         ) {
-            ConstraintLayout {
+            ConstraintLayout(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
                 val (text1, text2, image, button, tonalButton,
                     elevatedButton, outlineButton, textButton, textField, checkBox, switch,
                     radioGroup, progressBar, box, list) = createRefs()
+
+                val (divider) = createRefs()
 
                 // Guidelines: Helps you create consistent and adaptive
                 // layout by positioning element relative to a percentage or specific
@@ -83,31 +91,28 @@ fun practise1(onClick: (abc: String) -> Unit) {
 
                 val startGuideline = createGuidelineFromStart(.15f)
                 val endGuideline = createGuidelineFromEnd(.15f)
+                val topGuideline = createGuidelineFromTop(10.dp)
 
-                Text(
-                    text = "Hi Message",
-                    color = Color.Black,
-                    modifier = Modifier
-                        .constrainAs(text1) {
-                            top.linkTo(parent.top, margin = 10.dp)
-                            start.linkTo(startGuideline)
-                            bottom.linkTo(text2.top)
-                        }
-                        .padding(10.dp)
-                        .semantics { heading() }
-                        .semantics { contentDescription = "Hi Message" },
-                    fontSize = 10.sp,
-                    textAlign = TextAlign.Center
+                // Barriers: Used to create constraints relative to the
+                // edge of the multiple elements
 
+                val barrier1 = createEndBarrier(text1, text2)
+
+                createHorizontalChain(
+                    text1, text2,
+                    chainStyle = ChainStyle.Spread
                 )
 
-                Text(text = "Hi Message", modifier = Modifier
+
+                dynamictextView(Modifier
+                    .constrainAs(text1) {
+                        top.linkTo(parent.top, margin = 10.dp)
+                    })
+
+                Text(text = "Hi I am Raju", modifier = Modifier
                     .constrainAs(text2) {
-                        top.linkTo(text1.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(image.top)
-                        width = Dimension.matchParent
+                        top.linkTo(parent.top, margin = 10.dp)
+
                     }
                     .padding(10.dp)
                     .semantics {
@@ -119,12 +124,18 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     fontFamily = FontFamily.Serif,
                     textAlign = TextAlign.Center
                 )
+
+                HorizontalDivider(modifier = Modifier.constrainAs(divider) {
+                    top.linkTo(text2.bottom, margin = 10.dp)
+                    start.linkTo(parent.start, 10.dp)
+                    end.linkTo(parent.end, 10.dp)
+                    width = Dimension.fillToConstraints
+                })
                 Image(
                     modifier = Modifier
                         .constrainAs(image) {
-                            top.linkTo(text2.bottom)
-                            start.linkTo(startGuideline)
-                            end.linkTo(parent.end)
+                            top.linkTo(divider.bottom)
+                            start.linkTo(barrier1)
                             bottom.linkTo(button.top)
                         }
                         .padding(10.dp)
@@ -138,7 +149,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(button) {
                             top.linkTo(image.bottom)
-                            end.linkTo(endGuideline)
+                            start.linkTo(startGuideline)
                         }
                         .semantics {
                             contentDescription = ""
@@ -159,10 +170,9 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(tonalButton) {
                             top.linkTo(button.bottom)
-                            end.linkTo(endGuideline)
+                            start.linkTo(startGuideline)
                         }
                         .semantics { contentDescription = "" }
-                        .padding(10.dp),
                 ) {
                     Text("Filled Tonal Button", color = Color.White)
                 }
@@ -177,7 +187,6 @@ fun practise1(onClick: (abc: String) -> Unit) {
                             start.linkTo(startGuideline)
                         }
                         .semantics { contentDescription = "" }
-                        .padding(10.dp),
                 ) {
                     Text("Elevated Button", color = Color.White)
                 }
@@ -187,7 +196,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                 }, modifier = Modifier
                     .constrainAs(outlineButton) {
                         top.linkTo(elevatedButton.bottom)
-                        end.linkTo(endGuideline)
+                        start.linkTo(startGuideline)
                     }
                     .semantics { contentDescription = "" }) {
                     Text("Outline Text", color = Color.Black)
@@ -208,7 +217,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(textField) {
                             top.linkTo(textButton.bottom)
-                            end.linkTo(endGuideline)
+                            start.linkTo(startGuideline)
                         }
                         .padding(10.dp)
                         .semantics {
@@ -252,7 +261,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(switch) {
                             top.linkTo(checkBox.bottom)
-                            end.linkTo(endGuideline)
+                            start.linkTo(startGuideline)
                         }
                         .padding(10.dp)
                         .semantics { contentDescription = "Please select switch" },
@@ -267,8 +276,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                     modifier = Modifier
                         .constrainAs(radioGroup) {
                             top.linkTo(switch.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            end.linkTo(endGuideline)
                         }
                         .padding(10.dp)
                 ) {
@@ -302,16 +310,14 @@ fun practise1(onClick: (abc: String) -> Unit) {
 
                 CircularProgressIndicator(modifier = Modifier.constrainAs(progressBar) {
                     top.linkTo(radioGroup.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
+                    end.linkTo(endGuideline)
                 })
 
                 Box(
                     modifier = Modifier
                         .constrainAs(box) {
                             top.linkTo(progressBar.bottom)
-                            start.linkTo(parent.start)
-                            end.linkTo(parent.end)
+                            end.linkTo(endGuideline)
                         }
                         .fillMaxWidth()
                 ) {
@@ -370,4 +376,19 @@ private fun RadioButtonText(
         )
 
     }
+}
+
+@Composable
+fun dynamictextView(modifier: Modifier) {
+    Text(
+        text = "Hi Message",
+        color = Color.Black,
+        modifier = modifier
+            .padding(10.dp)
+            .semantics { heading() }
+            .semantics { contentDescription = "Hi Message" },
+        fontSize = 10.sp,
+        textAlign = TextAlign.Center
+
+    )
 }

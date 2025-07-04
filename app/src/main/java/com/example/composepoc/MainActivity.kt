@@ -3,6 +3,7 @@
 package com.example.composepoc
 
 import android.content.Intent
+import android.os.BatteryManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -38,27 +39,39 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.composepoc.domain.DataManager
 import com.example.composepoc.navgraph.Navgraph
 import com.example.composepoc.presentation.viewmodel.ProductEvent
 import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 import com.example.composepoc.presentation.viewmodel.ProductListViewModelCoroutine
+import com.example.composepoc.view.MyBottomSheetScreen
 import com.example.composepoc.view.dummyUi
 import com.example.composepoc.view.listingScreen
 import com.example.composepoc.view.practise1
 import com.example.composepoc.view.theme.ComposePOCTheme
+import com.example.composepoc.worker.DemoWorker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val productDetailVewModel: ProductListVewModel by viewModels()
     private val productListViewModelCoroutine: ProductListViewModelCoroutine by viewModels()
-
+    private val workManager = WorkManager.getInstance(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -181,6 +194,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Box(modifier = Modifier.padding(it)) {
                             Navgraph(rememberNavController())
+                            // MyBottomSheetScreen()
                         }
                     }
 
@@ -190,6 +204,48 @@ class MainActivity : ComponentActivity() {
         }
         productListViewModelCoroutine.getApiCalled()
         initObserver()
+        doWork()
+    }
+
+    private fun doWork() {
+        // Option 1: Build Constraints separately (often clearer)
+
+
+        val networkConstraint = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val batteryConstraint = Constraints.Builder()
+            .setRequiresBatteryNotLow(true)
+            .build()
+
+
+        val request = OneTimeWorkRequest.Builder(DemoWorker::class.java)
+
+        // 2. Create the PeriodicWorkRequest
+        val repeatingRequest = PeriodicWorkRequest.Builder(
+            DemoWorker::class.java,
+            repeatInterval = 6, // The interval duration
+            repeatIntervalTimeUnit = TimeUnit.HOURS // The unit for the interval
+        ).setConstraints(networkConstraint)
+            .setConstraints(batteryConstraint)
+            .setBackoffCriteria(
+                backoffPolicy = BackoffPolicy.EXPONENTIAL, // or .LINEAR
+                duration = Duration.ofSeconds(10), // Initial backoff delay (WorkManager.MIN_BACKOFF_MILLIS is 10 seconds)
+
+                // Note: The actual backoff delay might be longer due to system optimizations
+                // and will increase with each attempt for EXPONENTIAL policy.
+                // The minimum backoff delay is 10 seconds.
+            )
+            .build()
+
+
+        workManager.enqueueUniquePeriodicWork(
+            "myUniquePeriodicWorkName",
+            androidx.work.ExistingPeriodicWorkPolicy.KEEP,
+            repeatingRequest
+        )
+
     }
 
     private fun initObserver() {

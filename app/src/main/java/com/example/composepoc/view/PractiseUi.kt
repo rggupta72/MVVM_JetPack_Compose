@@ -24,6 +24,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -31,7 +32,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,6 +57,7 @@ import com.example.composepoc.domain.model.DummyArray
 import com.example.composepoc.presentation.viewmodel.DummyArrayViewModel
 import com.example.composepoc.utils.S_ELEVATION
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun dummyUi(
@@ -69,10 +73,14 @@ internal fun dummyUi(
     BackHandler {
         DataManager.switchPages()
     }
+    var showBottomSheetDialog by remember { mutableStateOf(false) }
     val dummyArrayViewModel: DummyArrayViewModel = hiltViewModel()
     val scrollState = rememberScrollState()
     val state = remember { mutableStateOf("") }
     var state1 = remember { mutableStateOf(::a) }
+    val scope = rememberCoroutineScope()
+    // Create a SnackbarHostState to control Snackbar appearances
+    val snackbarHostState = remember { SnackbarHostState() }
     ConstraintLayout {
 
         val (text, image, button, textField, box, lazyColumn) = createRefs()
@@ -114,7 +122,7 @@ internal fun dummyUi(
 
         Button(
             onClick = {
-                textClick(abc)
+                showBottomSheetDialog = true
             },
             modifier = Modifier
                 .constrainAs(button) {
@@ -213,6 +221,11 @@ internal fun dummyUi(
 
     }
     landingScreen(state1.value)
+    if (showBottomSheetDialog) {
+        MyBottomSheetScreen(showBottomSheetDialog) {
+            showBottomSheetDialog = it
+        }
+    }
 }
 
 @Composable
