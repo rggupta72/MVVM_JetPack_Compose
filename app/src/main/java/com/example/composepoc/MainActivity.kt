@@ -221,6 +221,17 @@ class MainActivity : ComponentActivity() {
 
 
         val request = OneTimeWorkRequest.Builder(DemoWorker::class.java)
+            .setConstraints(networkConstraint)
+            .setConstraints(batteryConstraint)
+            .setBackoffCriteria(
+                backoffPolicy = BackoffPolicy.EXPONENTIAL, // or .LINEAR
+                duration = Duration.ofSeconds(10), // Initial backoff delay (WorkManager.MIN_BACKOFF_MILLIS is 10 seconds)
+
+                // Note: The actual backoff delay might be longer due to system optimizations
+                // and will increase with each attempt for EXPONENTIAL policy.
+                // The minimum backoff delay is 10 seconds.
+            )
+            .build()
 
         // 2. Create the PeriodicWorkRequest
         val repeatingRequest = PeriodicWorkRequest.Builder(
@@ -245,6 +256,8 @@ class MainActivity : ComponentActivity() {
             androidx.work.ExistingPeriodicWorkPolicy.KEEP,
             repeatingRequest
         )
+
+      //  workManager.enqueue(request)
 
     }
 

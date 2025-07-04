@@ -1,6 +1,7 @@
 package com.example.composepoc.domain.di
 
 import com.example.composepoc.data.respository.RepositoryImpl
+import com.example.composepoc.database.db.WorkerDao
 import com.example.composepoc.domain.usecase.GetProductDetailUseCase
 import com.example.composepoc.domain.usecase.GetProductListUseCase
 import dagger.Module

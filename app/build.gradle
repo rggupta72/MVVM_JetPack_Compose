@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id "org.jetbrains.kotlin.plugin.compose" version "2.0.20"
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -106,4 +107,15 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-core-ktx:2.9.1'
+
+
+    implementation("androidx.room:room-runtime:2.7.2")
+    // To use Kotlin Symbol Processing (KSP) for Kotlin projects (recommended)
+    ksp("androidx.room:room-compiler:2.7.2")
+    // To use Kotlin Coroutines with Room
+    implementation("androidx.room:room-ktx:2.7.2")
+    // Optional - Paging 3 Integration
+    implementation("androidx.room:room-paging:2.7.2")
+    // Optional - Test helpers
+    testImplementation("androidx.room:room-testing:2.7.2")
 }

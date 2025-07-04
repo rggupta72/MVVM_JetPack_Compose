@@ -2,15 +2,19 @@ package com.example.composepoc.worker
 
 import android.content.Context
 import android.util.Log
-import androidx.work.Worker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.example.composepoc.database.RoomDataModel
+import com.example.composepoc.database.db.WorkerDatabase
+import kotlin.random.Random
 
 class DemoWorker(
     context: Context,
     workerParams: WorkerParameters
-) : Worker(context, workerParams) {
+) : CoroutineWorker(context, workerParams) {
     val maxRetryConstantIWant = 3
-    override fun doWork(): Result {
+    var workerDao = WorkerDatabase.getInstance(applicationContext).workerDao()
+    override suspend fun doWork(): Result {
         return if (runAttemptCount < maxRetryConstantIWant) {
             try {
                 // Simulate some work
@@ -36,9 +40,13 @@ class DemoWorker(
         }
     }
 
-    fun performWork() {
-        Thread.sleep(2000)
-        Log.d("Test Worker", "Worker Called")
+    suspend fun performWork() {
+        val randomNumber = Random.nextInt()
+        workerDao.setData(listOf(RoomDataModel(randomNumber, "Worker")))
+
+        if (workerDao.getWorker().isNotEmpty()) {
+            Log.d("Data List", workerDao.getWorker().toString())
+        }
 
     }
 }
