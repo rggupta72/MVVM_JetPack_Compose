@@ -39,6 +39,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.composepoc.domain.DataManager
+import com.example.composepoc.navgraph.Navgraph
 import com.example.composepoc.presentation.viewmodel.ProductEvent
 import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 import com.example.composepoc.presentation.viewmodel.ProductListViewModelCoroutine
@@ -179,7 +180,7 @@ class MainActivity : ComponentActivity() {
                         }
                     ) {
                         Box(modifier = Modifier.padding(it)) {
-                            navGraph()
+                            Navgraph(rememberNavController())
                         }
                     }
 
