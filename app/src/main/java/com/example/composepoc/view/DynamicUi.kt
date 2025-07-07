@@ -1,45 +1,87 @@
 package com.example.composepoc.view
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.example.composepoc.utils.ButtonUi
 
 @Composable
 fun DynamiCUi() {
 
     ConstraintLayout {
-        val (text) = createRefs()
+        val (headingText, mediumStartText, mediumEndText, button) = createRefs()
         val startGuideLine = createGuidelineFromStart(10.dp)
         val endGuideLine = createGuidelineFromEnd(10.dp)
         val topGuideLine = createGuidelineFromTop(10.dp)
-        val barrierEnd = createEndBarrier(text)
-        val barrierStart = createStartBarrier()
-        createHorizontalChain(
-            text
-        )
+        val centerGuideline = createGuidelineFromStart(0.5f)
+        val topBarrier = createBottomBarrier(mediumStartText, mediumEndText)
+//        createHorizontalChain(
+//            mediumStartText, mediumEndText,
+//            chainStyle = ChainStyle.SpreadInside
+//        )
 
         HeadingText(
             modifier = Modifier
                 .fillMaxWidth()
-                .constrainAs(text) {
+                .constrainAs(headingText) {
                     start.linkTo(startGuideLine)
                     top.linkTo(topGuideLine)
                     end.linkTo(endGuideLine)
-                },
+                }.semantics { heading() }.semantics { contentDescription = "Dynamic Text" },
             "Dynamic Text",
             Color.Black,
             MaterialTheme.typography.headlineLarge,
-            textAlign = TextAlign.Center
+            TextAlign.Center
         )
 
+        MediumText(
+            modifier = Modifier
+                .constrainAs(mediumStartText) {
+                    top.linkTo(headingText.bottom)
+                    start.linkTo(parent.start, 10.dp)
+                    end.linkTo(centerGuideline)
+                    width = Dimension.fillToConstraints
+                },
+            "Hi My Name is Raju Gupta", Color.Blue, textAlign = TextAlign.Center,
+        )
 
+        MediumText(
+            modifier = Modifier
+                .constrainAs(mediumEndText) {
+                    top.linkTo(headingText.bottom)
+                    start.linkTo(centerGuideline, 10.dp)
+                    end.linkTo(parent.end, 10.dp)
+                    width = Dimension.fillToConstraints
+                },
+            "I am android developer with 10 plus years of experiance",
+            Color.Blue,
+        )
 
+        ButtonUi(
+            modifier = Modifier.constrainAs(button) {
+                top.linkTo(topBarrier)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }.semantics { contentDescription = "Button" },
+            color = ButtonDefaults.buttonColors(Color.Red),
+            "Button",
+            textColour = Color.White,
+            textAlign = TextAlign.Start
+        ) {
+
+        }
 
     }
 
