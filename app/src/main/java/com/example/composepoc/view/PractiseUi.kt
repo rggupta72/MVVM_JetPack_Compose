@@ -224,6 +224,7 @@ internal fun dummyUi(
     if (showBottomSheetDialog) {
         MyBottomSheetScreen(showBottomSheetDialog) {
             showBottomSheetDialog = it
+            textClick(10)
         }
     }
 }

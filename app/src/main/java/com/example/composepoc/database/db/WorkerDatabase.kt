@@ -6,12 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.composepoc.database.Note
 import com.example.composepoc.database.RoomDataModel
 
-@Database(entities = [RoomDataModel::class], version = 1)
+@Database(entities = [RoomDataModel::class, Note::class ], version = 1)
 abstract class WorkerDatabase : RoomDatabase() {
 
     abstract fun workerDao(): WorkerDao
+    abstract fun noteDao(): NoteDao
 
     companion object {
         private var INSTANCE: WorkerDatabase? = null

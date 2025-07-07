@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.composepoc.domain.DataManager
+import com.example.composepoc.view.DynamiCUi
 import com.example.composepoc.view.dummyUi
 import com.example.composepoc.view.listingScreen
 import com.example.composepoc.view.practise1
@@ -15,9 +16,10 @@ import com.example.composepoc.view.practise1
 fun Navgraph(navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = NavRoute.Home.path) {
-        addHomeScreen(navController,this)
-        addProfileScreen(navController,this)
-        addSettingScreen(navController,this)
+        addHomeScreen(navController, this)
+        addProfileScreen(navController, this)
+        addSettingScreen(navController, this)
+        addDynamicScreen(navController, this)
     }
 }
 
@@ -44,8 +46,14 @@ fun addProfileScreen(navController: NavHostController, navGraphBuilder: NavGraph
 
 fun addSettingScreen(navController: NavHostController, navGraphBuilder: NavGraphBuilder) {
     navGraphBuilder.composable(route = NavRoute.Setting.path) {
-        dummyUi(DataManager.data){
-
+        dummyUi(DataManager.data) {
+            navController.navigate(NavRoute.DynamicUi.path)
         }
+    }
+}
+
+fun addDynamicScreen(navController: NavHostController, navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = NavRoute.DynamicUi.path) {
+        DynamiCUi()
     }
 }
