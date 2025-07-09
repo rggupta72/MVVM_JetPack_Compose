@@ -22,7 +22,7 @@ fun DynamicCard(
     modifier: Modifier = Modifier,
     cardCornerRadius: Dp = 2.dp,
     cardElevation: Dp = 8.dp,
-    cardColors: Color = Color.White,
+    cardColors: Color = Color.Unspecified,
     contentDescriptions: String? = null,
     onClickAction: Action? = null,
     borderColor: Color? = null,

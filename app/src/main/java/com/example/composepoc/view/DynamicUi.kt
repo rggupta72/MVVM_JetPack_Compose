@@ -41,7 +41,7 @@ fun DynamiCUi() {
 //        )
 
 
-            HeadingText(
+            DynamicText(
                 modifier = Modifier
                     .fillMaxWidth()
                     .constrainAs(headingText) {
@@ -51,13 +51,14 @@ fun DynamiCUi() {
                     }
                     .semantics { heading() }
                     .semantics { contentDescription = "Dynamic Text" },
-                "Dynamic Text",
-                Color.Black,
-                MaterialTheme.typography.headlineLarge,
-                TextAlign.Center
+                text = "Dynamic Text",
+
+                color = Color.Black,
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center
             )
 
-            MediumText(
+            DynamicText(
                 modifier = Modifier
                     .constrainAs(mediumStartText) {
                         top.linkTo(headingText.bottom)
@@ -65,10 +66,11 @@ fun DynamiCUi() {
                         end.linkTo(startGuideline)
                         width = Dimension.fillToConstraints
                     },
-                "Hi My Name is Raju Gupta", Color.Blue, textAlign = TextAlign.Center,
+                text = "Hi My Name is Raju Gupta",
+                color = Color.Blue, textAlign = TextAlign.Center,
             )
 
-            MediumText(
+            DynamicText(
                 modifier = Modifier
                     .constrainAs(mediumEndText) {
                         top.linkTo(headingText.bottom)
@@ -76,8 +78,8 @@ fun DynamiCUi() {
                         end.linkTo(parent.end, 10.dp)
                         width = Dimension.fillToConstraints
                     },
-                "I am android developer with 10 plus years of experiance",
-                Color.Blue,
+                text = "I am android developer with 10 plus years of experiance",
+                color = Color.Blue,
             )
 
             ButtonUi(
