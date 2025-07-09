@@ -7,6 +7,8 @@ import com.example.composepoc.adapter.getGmwHubViewStateList
 import com.example.composepoc.core.common.UiState
 import com.example.composepoc.domain.usecase.GetProductListUseCase
 import com.example.composepoc.presentation.state.HealthNeedsState
+import com.example.composepoc.presentation.state.ProductDetailState
+import com.example.composepoc.presentation.state.ProductDetailsEvent
 import com.example.composepoc.presentation.state.ProductListState
 import com.example.composepoc.utils.SharedEventBus
 import com.example.composepoc.utils.SharedUiEvent
@@ -24,10 +26,9 @@ import javax.inject.Inject
 class ProductListVewModel @Inject constructor(
     private val productListUseCase: GetProductListUseCase,
     private val sharedEventBus: SharedEventBus
-) : ViewModel() {
+) : CoroutineBaseViewModel<ProductListState, ProductDetailsEvent>() {
 
-    private val _productList = MutableStateFlow(ProductListState())
-    val productList = _productList.asStateFlow()
+    override fun initState() = ProductListState()
 
     private val _healthNeedsList = MutableStateFlow(HealthNeedsState())
     val healthNeedsList = _healthNeedsList.asStateFlow()
@@ -37,25 +38,27 @@ class ProductListVewModel @Inject constructor(
             productListUseCase.invoke().collectLatest {
                 when (it) {
                     is UiState.Loading -> {
-                        _productList.value = ProductListState(isLoading = true)
+                        updateState { state ->
+                            state.copy(isLoading = true)
+                        }
                     }
 
                     is UiState.Success -> {
                         sharedEventBus.produceEvent(SharedUiEvent.ShowMessage("Event Trigger"))
-                        _productList.value = ProductListState(data = it.data)
+                        updateState { state ->
+                            state.copy(data = it.data)
+                        }
                     }
 
                     is UiState.Error -> {
-                        _productList.value = ProductListState(error = it.message.toString())
+                        updateState { state ->
+                            state.copy(error = it.message.toString())
+                        }
                     }
                 }
             }
         }
         observeSharedEvent()
-    }
-
-    fun getProductList() {
-
     }
 
     fun getListOfHealthNeedsData() {

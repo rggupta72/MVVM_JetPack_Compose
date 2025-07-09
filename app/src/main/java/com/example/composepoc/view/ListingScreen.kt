@@ -30,7 +30,7 @@ fun listingScreen(
 
     val viewModel: ProductListVewModel = hiltViewModel()
     val context = LocalContext.current
-    val result by viewModel.productList.collectAsStateWithLifecycle()
+    val result by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = true) {
         Log.d("Name", "$name : $password")

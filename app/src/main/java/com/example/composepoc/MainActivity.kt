@@ -51,7 +51,6 @@ import com.example.composepoc.domain.DataManager
 import com.example.composepoc.navgraph.Navgraph
 import com.example.composepoc.presentation.viewmodel.ProductEvent
 import com.example.composepoc.presentation.viewmodel.ProductListVewModel
-import com.example.composepoc.presentation.viewmodel.ProductListViewModelCoroutine
 import com.example.composepoc.view.MyBottomSheetScreen
 import com.example.composepoc.view.dummyUi
 import com.example.composepoc.view.listingScreen
@@ -70,7 +69,6 @@ import java.util.concurrent.TimeUnit
 class MainActivity : ComponentActivity() {
 
     private val productDetailVewModel: ProductListVewModel by viewModels()
-    private val productListViewModelCoroutine: ProductListViewModelCoroutine by viewModels()
     private val workManager = WorkManager.getInstance(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +82,7 @@ class MainActivity : ComponentActivity() {
                 // This block will be executed when the lifecycle is AT LEAST STARTED.
                 // It will be cancelled when the lifecycle is STOPPED.
                 // It will restart if the lifecycle moves from STOPPED to STARTED again.
-                productDetailVewModel.productList.collectLatest {
+                productDetailVewModel.uiState.collectLatest {
                     Log.d("Flow data", it.data?.size.toString() ?: "")
                 }
             }
@@ -202,8 +200,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        productListViewModelCoroutine.getApiCalled()
-        initObserver()
         doWork()
     }
 
@@ -257,28 +253,10 @@ class MainActivity : ComponentActivity() {
             repeatingRequest
         )
 
-      //  workManager.enqueue(request)
+        //  workManager.enqueue(request)
 
     }
 
-    private fun initObserver() {
-        productListViewModelCoroutine.uiEVENT.observe(this) { navigation ->
-            when (navigation) {
-                is ProductEvent.Loading -> {
-                    // to do
-                }
-
-                is ProductEvent.Success -> {
-                    // to do
-                }
-
-                is ProductEvent.Error -> {
-                    // to do
-                }
-            }
-
-        }
-    }
 
     private fun launchHealthNeeds(count: Int) {
         val intent = Intent(this, HealthNeedsActivity::class.java)

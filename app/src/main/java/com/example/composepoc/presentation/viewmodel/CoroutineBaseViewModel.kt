@@ -1,13 +1,24 @@
 package com.example.composepoc.presentation.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
-abstract class CoroutineBaseViewModel<VIEW_STATE: BaseViewState, VIEW_EVENT: BaseViewEvent> : BaseViewModel() {
+abstract class CoroutineBaseViewModel<VIEW_STATE, VIEW_EVENT> : ViewModel() {
 
-    protected val _uiState : MutableLiveData<VIEW_STATE> = MutableLiveData()
-    protected val _uiEvent : MutableLiveData<VIEW_EVENT> = MutableLiveData()
-    val uiState : LiveData<VIEW_STATE> get() = _uiState
-    val uiEVENT : LiveData<VIEW_EVENT> get() = _uiEvent
+    protected abstract fun initState(): VIEW_STATE
+    protected val _uiState = MutableStateFlow(initState())
+
+    val uiState = _uiState.asStateFlow()
+
+    open fun onEvent(event: VIEW_EVENT) = Unit
+
+    protected fun updateState(newState: (currentState:VIEW_STATE ) -> VIEW_STATE){
+        _uiState.update{ state->
+            newState(state)
+        }
+    }
+
 
 }
