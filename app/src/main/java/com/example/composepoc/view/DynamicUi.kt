@@ -16,16 +16,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.example.composepoc.utils.ButtonUi
 
 @Composable
 fun DynamiCUi() {
 
     val textvalue = remember { mutableStateOf("Raje") }
 
-    CardWithText(
+    DynamicCard(
         modifier = Modifier.padding(10.dp),
-        elevation = 5.dp) {
+        cardElevation = 5.dp,
+        onClickAction = {
+            // to Do
+        }) {
         ConstraintLayout {
             val (headingText, mediumStartText, mediumEndText, button, textField) = createRefs()
             val startGuideLine = createGuidelineFromStart(10.dp)
@@ -94,14 +96,16 @@ fun DynamiCUi() {
 
             }
 
-            TextInputField(modifier = Modifier
-                .constrainAs(textField) {
-                    top.linkTo(button.bottom)
-                    start.linkTo(parent.start, 10.dp)
-                    end.linkTo(parent.end, 10.dp)
-                    width = Dimension.fillToConstraints
-                }.padding(vertical = 10.dp)
-                .semantics { contentDescription = textvalue.value }, textvalue.value
+            TextInputField(
+                modifier = Modifier
+                    .constrainAs(textField) {
+                        top.linkTo(button.bottom)
+                        start.linkTo(parent.start, 10.dp)
+                        end.linkTo(parent.end, 10.dp)
+                        width = Dimension.fillToConstraints
+                    }
+                    .padding(vertical = 10.dp)
+                    .semantics { contentDescription = textvalue.value }, textvalue.value
             ) {
                 textvalue.value = it
             }

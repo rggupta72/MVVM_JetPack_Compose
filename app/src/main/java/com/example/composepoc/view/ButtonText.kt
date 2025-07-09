@@ -1,4 +1,4 @@
-package com.example.composepoc.utils
+package com.example.composepoc.view
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
