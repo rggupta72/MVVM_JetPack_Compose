@@ -82,6 +82,10 @@ class ProductListVewModel @Inject constructor(
 
     }
 
+    override fun onEvent(productDetailsEvent : ProductDetailsEvent){
+        
+    }
+
     private fun observeSharedEvent() {
         viewModelScope.launch {
             sharedEventBus.events.collectLatest { event ->
