@@ -7,7 +7,8 @@ import com.example.composepoc.domain.model.ProductItem
 data class ProductListState(
     val isLoading: Boolean = false,
     val data: List<ProductItem>? = null,
-    var error: String = ""
+    var error: String = "",
+    var productId : Int = 0
 )
 
 data class HealthNeedsState(

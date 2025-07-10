@@ -1,13 +1,13 @@
 package com.example.composepoc.presentation.viewmodel
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composepoc.adapter.HealthNeedItemViewState
 import com.example.composepoc.adapter.getGmwHubViewStateList
 import com.example.composepoc.core.common.UiState
 import com.example.composepoc.domain.usecase.GetProductListUseCase
+import com.example.composepoc.navgraph.NavigationManager
+import com.example.composepoc.navgraph.Route
 import com.example.composepoc.presentation.state.HealthNeedsState
-import com.example.composepoc.presentation.state.ProductDetailState
 import com.example.composepoc.presentation.state.ProductDetailsEvent
 import com.example.composepoc.presentation.state.ProductListState
 import com.example.composepoc.utils.SharedEventBus
@@ -17,15 +17,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductListVewModel @Inject constructor(
     private val productListUseCase: GetProductListUseCase,
-    private val sharedEventBus: SharedEventBus
+    private val sharedEventBus: SharedEventBus,
+    private val navigationManager: NavigationManager
 ) : CoroutineBaseViewModel<ProductListState, ProductDetailsEvent>() {
 
     override fun initState() = ProductListState()
@@ -82,9 +81,15 @@ class ProductListVewModel @Inject constructor(
 
     }
 
-    override fun onEvent(productDetailsEvent : ProductDetailsEvent){
-        
+    override fun onEvent(event: ProductDetailsEvent) {
+        when (event) {
+            is ProductDetailsEvent.PractiseUi -> {
+                navigationManager.navigate(Route.PRACTISE_UI)
+            }
+        }
+
     }
+
 
     private fun observeSharedEvent() {
         viewModelScope.launch {

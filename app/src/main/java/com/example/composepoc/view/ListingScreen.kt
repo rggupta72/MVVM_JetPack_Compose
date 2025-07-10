@@ -19,22 +19,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.composepoc.launchEffect1
+import com.example.composepoc.presentation.state.ProductDetailsEvent
 import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 
 @Composable
 fun listingScreen(
-    name: String = "", password: String = "",
-    onClick: () -> Unit
+    onEvent: (ProductDetailsEvent) -> Unit,
+    viewModel: ProductListVewModel
 ) {
 
-    val viewModel: ProductListVewModel = hiltViewModel()
     val context = LocalContext.current
     val result by viewModel.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(key1 = true) {
-        Log.d("Name", "$name : $password")
-    }
 
     if (result.isLoading) {
         Column(
@@ -52,7 +47,7 @@ fun listingScreen(
             LazyColumn {
                 items(it) { item ->
                     listItem(item) { product ->
-                        onClick()
+                        onEvent(ProductDetailsEvent.PractiseUi(product.id))
                         Toast.makeText(context, product.title, Toast.LENGTH_SHORT).show()
                     }
                 }

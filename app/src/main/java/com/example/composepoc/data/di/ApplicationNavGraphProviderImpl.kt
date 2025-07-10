@@ -1,5 +1,6 @@
 package com.example.composepoc.data.di
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -8,7 +9,9 @@ import androidx.navigation.createGraph
 import com.example.composepoc.navgraph.NavGraphRoute
 import com.example.composepoc.navgraph.NavigationBase
 import com.example.composepoc.navgraph.ReuseComposable
+import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 import com.example.composepoc.view.listingScreen
+import com.example.composepoc.view.practise1
 
 class ApplicationNavGraphProviderImpl : ApplicationNavGraphProvider {
     override fun getApplicationNavGraph(
@@ -26,13 +29,20 @@ fun NavGraphBuilder.launcherGraph(navHostController: NavHostController)
 //        route = NavGraphRoute.HOME,
 //        startDestination = NavigationBase.PRODUCT_LIST.destination
 //    )
-    {
-        ReuseComposable(route = NavigationBase.PRODUCT_LIST.destination) {
-            listingScreen(
-                "", ""
-            ) {
+{
+    ReuseComposable(route = NavigationBase.PRODUCT_LIST.destination) {
+        val viewModel: ProductListVewModel = hiltViewModel()
+        listingScreen(
+            viewModel::onEvent,
+            viewModel
+        )
+    }
 
-            }
+    ReuseComposable(route = NavigationBase.PRACTISE_UI.destination) {
+        practise1 {
+
         }
     }
+
+}
 

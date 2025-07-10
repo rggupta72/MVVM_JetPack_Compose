@@ -1,11 +1,13 @@
 package com.example.composepoc.navgraph
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.composepoc.domain.DataManager
+import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 import com.example.composepoc.view.DynamiCUi
 import com.example.composepoc.view.dummyUi
 import com.example.composepoc.view.listingScreen
@@ -26,11 +28,11 @@ fun Navgraph(navController: NavHostController) {
 fun addHomeScreen(navController: NavHostController, navGraphBuilder: NavGraphBuilder) {
 
     navGraphBuilder.composable(route = NavRoute.Home.path) {
+        val viewModel : ProductListVewModel = hiltViewModel()
         listingScreen(
-            "", ""
-        ) {
-            navController.navigate(NavRoute.Profile.path)
-        }
+            viewModel::onEvent,
+            viewModel
+        )
     }
 
 }
