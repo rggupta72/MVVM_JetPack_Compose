@@ -1,5 +1,6 @@
 package com.example.composepoc.view
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,11 +52,17 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.composepoc.R
-import com.example.composepoc.utils.Divider
+import com.example.composepoc.presentation.state.ProductDetailsEvent
+import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 
 @Composable
-fun practise1(onClick: (abc: String) -> Unit) {
+fun practise1(
+    onEvent: (ProductDetailsEvent) -> Unit,
+    viewModel: ProductListVewModel,
+    args: Bundle?,
+) {
 
+    viewModel.updateArgsBundle(args)
     var textValue by remember { mutableStateOf("") }
     var checkBoxValue by remember { mutableStateOf(false) }
     var isSwitch by remember { mutableStateOf(false) }
@@ -64,7 +71,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .clickable {
-                onClick("")
+                onEvent(ProductDetailsEvent.PractiseUi)
             }
     )
     {
@@ -155,7 +162,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                             contentDescription = ""
                         },
                     onClick = {
-                        onClick("")
+                        onEvent(ProductDetailsEvent.PractiseUi)
                     },
                 ) {
                     Text(
@@ -165,7 +172,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
 
                 FilledTonalButton(
                     onClick = {
-                        onClick("")
+                        onEvent(ProductDetailsEvent.PractiseUi)
                     },
                     modifier = Modifier
                         .constrainAs(tonalButton) {
@@ -179,7 +186,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
 
                 ElevatedButton(
                     onClick = {
-                        onClick("")
+                        onEvent(ProductDetailsEvent.PractiseUi)
                     },
                     modifier = Modifier
                         .constrainAs(elevatedButton) {
@@ -192,7 +199,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                 }
 
                 OutlinedButton(onClick = {
-                    onClick("")
+                    onEvent(ProductDetailsEvent.PractiseUi)
                 }, modifier = Modifier
                     .constrainAs(outlineButton) {
                         top.linkTo(elevatedButton.bottom)
@@ -203,7 +210,7 @@ fun practise1(onClick: (abc: String) -> Unit) {
                 }
 
                 TextButton(onClick = {
-                    onClick("")
+                    onEvent(ProductDetailsEvent.PractiseUi)
                 }, modifier = Modifier
                     .constrainAs(textButton) {
                         top.linkTo(outlineButton.bottom)

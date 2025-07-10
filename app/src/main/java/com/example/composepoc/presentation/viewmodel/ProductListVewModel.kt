@@ -1,10 +1,12 @@
 package com.example.composepoc.presentation.viewmodel
 
+import android.os.Bundle
 import androidx.lifecycle.viewModelScope
 import com.example.composepoc.adapter.HealthNeedItemViewState
 import com.example.composepoc.adapter.getGmwHubViewStateList
 import com.example.composepoc.core.common.UiState
 import com.example.composepoc.domain.usecase.GetProductListUseCase
+import com.example.composepoc.navgraph.Arguments
 import com.example.composepoc.navgraph.NavigationManager
 import com.example.composepoc.navgraph.Route
 import com.example.composepoc.presentation.state.HealthNeedsState
@@ -83,9 +85,19 @@ class ProductListVewModel @Inject constructor(
 
     override fun onEvent(event: ProductDetailsEvent) {
         when (event) {
-            is ProductDetailsEvent.PractiseUi -> {
-                navigationManager.navigate(Route.PRACTISE_UI)
+            is ProductDetailsEvent.ProductList -> {
+                navigationManager.navigate(Route.PRACTISE_UI+ "?${Arguments.USER_ID} = ${event.productCode}" +"?${Arguments.TITLE} = ${event.title}"+"?${Arguments.DESCRIPTION} = ${event.description}")
             }
+            is ProductDetailsEvent.PractiseUi -> {
+                navigationManager.navigate(Route.DYNAMIC_UI)
+            }
+        }
+
+    }
+
+    fun updateArgsBundle(args : Bundle?){
+        args?.getInt(Arguments.USER_ID)?.let {
+            updateState { state -> state.copy(productId = it) }
         }
 
     }

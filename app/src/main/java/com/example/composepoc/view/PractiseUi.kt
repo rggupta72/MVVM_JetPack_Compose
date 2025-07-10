@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -48,21 +46,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.composepoc.R
 import com.example.composepoc.a
 import com.example.composepoc.b
 import com.example.composepoc.domain.DataManager
 import com.example.composepoc.domain.model.DummyArray
-import com.example.composepoc.presentation.viewmodel.DummyArrayViewModel
+import com.example.composepoc.presentation.viewmodel.CommonDataEvent
+import com.example.composepoc.presentation.viewmodel.CommonViewModel
 import com.example.composepoc.utils.S_ELEVATION
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 internal fun dummyUi(
-    array: Array<DummyArray>,
-    textClick: (abc: Int) -> Unit
+    onEvent: (CommonDataEvent) -> Unit,
+    viewModel: CommonViewModel
 ) {
 //    val viewModelInternal = remember { viewModel }
 //    val isLoading = remember { mutableStateOf(true) }
@@ -74,7 +71,6 @@ internal fun dummyUi(
         DataManager.switchPages()
     }
     var showBottomSheetDialog by remember { mutableStateOf(false) }
-    val dummyArrayViewModel: DummyArrayViewModel = hiltViewModel()
     val scrollState = rememberScrollState()
     val state = remember { mutableStateOf("") }
     var state1 = remember { mutableStateOf(::a) }
@@ -94,7 +90,7 @@ internal fun dummyUi(
                     height = Dimension.fillToConstraints
                 }
                 .clickable {
-                    textClick(abc)
+                    onEvent(CommonDataEvent.DummyUi(abc))
                 },
             text = "I am tester",
             fontStyle = FontStyle.Italic,
@@ -200,31 +196,13 @@ internal fun dummyUi(
             )
         }
 
-        Column(modifier = Modifier
-            .constrainAs(lazyColumn) {
-                top.linkTo(box.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                bottom.linkTo(parent.bottom)
-                height = Dimension.fillToConstraints
-            }
-        ) {
-
-            LazyColumn {
-                items(array) { dummyArrayItem ->
-                    listItem(dummyArrayItem)
-                }
-            }
-
-        }
-
 
     }
     landingScreen(state1.value)
     if (showBottomSheetDialog) {
         MyBottomSheetScreen(showBottomSheetDialog) {
             showBottomSheetDialog = it
-            textClick(10)
+            CommonDataEvent.DummyUi(10)
         }
     }
 }

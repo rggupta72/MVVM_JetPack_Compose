@@ -17,9 +17,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.example.composepoc.presentation.state.ProductDetailsEvent
+import com.example.composepoc.presentation.viewmodel.CommonDataEvent
+import com.example.composepoc.presentation.viewmodel.CommonViewModel
+import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 
 @Composable
-fun DynamiCUi() {
+fun DynamiCUi(
+    onEvent: (CommonDataEvent) -> Unit,
+    viewModel: CommonViewModel
+) {
 
     val textValue = remember { mutableStateOf("Raju") }
     val spinnerValue = remember { mutableStateOf(0) }

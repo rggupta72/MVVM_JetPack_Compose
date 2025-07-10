@@ -1,7 +1,11 @@
 package com.example.composepoc.navgraph
 
+import org.hamcrest.Description
+
 object Arguments {
     const val USER_ID = "userId"
+    const val TITLE = "title"
+    const val DESCRIPTION = "description"
 }
 
 object ScreenName {
@@ -16,8 +20,9 @@ object ScreenName {
 
 object Route {
     const val PRODUCT_LIST = "productList"
-    const val PRODUCT_DETAILS = "productDetails"
     const val PRACTISE_UI = "practiseUi"
+    const val Dummy_DYNAMIC_UI = "dummyDynamicUi"
+    const val Dummy_UI = "dummyUi"
     const val DYNAMIC_UI = "dynamicUi"
 
     object Control {
