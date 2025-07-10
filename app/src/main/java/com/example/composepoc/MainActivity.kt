@@ -2,59 +2,31 @@
 
 package com.example.composepoc
 
-import android.content.Intent
-import android.os.BatteryManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavType
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequest
-import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.composepoc.data.di.ApplicationNavGraphProvider
 import com.example.composepoc.domain.DataManager
-import com.example.composepoc.navgraph.Navgraph
-import com.example.composepoc.presentation.viewmodel.ProductEvent
+import com.example.composepoc.navgraph.NavigationBase
 import com.example.composepoc.presentation.viewmodel.ProductListVewModel
-import com.example.composepoc.view.MyBottomSheetScreen
-import com.example.composepoc.view.dummyUi
-import com.example.composepoc.view.listingScreen
-import com.example.composepoc.view.practise1
 import com.example.composepoc.view.theme.ComposePOCTheme
 import com.example.composepoc.worker.DemoWorker
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,12 +36,17 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.Duration
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : BaseActivity() {
 
     private val productDetailVewModel: ProductListVewModel by viewModels()
     private val workManager = WorkManager.getInstance(this)
+    private lateinit var parentNavController: NavHostController
+
+    @Inject
+    lateinit var applicationNavGraphProvider: ApplicationNavGraphProvider
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -96,105 +73,98 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    parentNavController = rememberNavController()
+                    NavHost(
+                        navController = parentNavController,
+                        graph = applicationNavGraphProvider.getApplicationNavGraph(
+                            navController = parentNavController,
+                            startDestination = NavigationBase.PRODUCT_LIST.destination
+                        ),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    super.HandleDeepLink(parentNavController)
 
-                    // because of state used this will update on main thread
-//                    if (DataManager.isDataLoad.value) {
-//                        if (DataManager.currentPage.value == Page.DASHBOARD) {
-//                            listingScreen(
-//                                onClick = {
-//                                    DataManager.switchPages()
+//                    Scaffold(topBar = {
+//                        TopAppBar(
+//                            title = {
+//                                Text("Testing App", color = Color.White)
+//                            },
+//                            colors = TopAppBarDefaults.topAppBarColors(Color.Red),
+//                            navigationIcon = {
+//                                IconButton(
+//                                    onClick = {
+//                                        Toast.makeText(this, "Hi", Toast.LENGTH_SHORT).show()
+//                                    },
+//                                ) {
+//                                    Icon(
+//                                        painter = painterResource(R.drawable.baseline_format_list_bulleted_24),
+//                                        contentDescription = ""
+//                                    )
 //                                }
-//                            )
+//                            },
+//                            actions = {
+//                                IconButton(onClick = {
+//                                    Toast.makeText(
+//                                        this@MainActivity,
+//                                        "Setting",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+//                                }) {
+//                                    Icon(
+//                                        painter = painterResource(R.drawable.baseline_settings_24),
+//                                        contentDescription = "Setting"
+//                                    )
+//                                }
+//                            }
+//                        )
+//                    },
+//                        bottomBar = {
+//                            Row(
+//                                modifier = Modifier.fillMaxWidth(),
+//                                horizontalArrangement = Arrangement.SpaceBetween
+//                            ) {
+//                                BottomAppBar(
+//                                    contentColor = Color.White,
+//                                    containerColor = Color.Blue
+//                                ) {
+//                                    IconButton(onClick = {
+//                                        Toast.makeText(
+//                                            this@MainActivity,
+//                                            "Home",
+//                                            Toast.LENGTH_SHORT
+//                                        )
+//                                            .show()
+//                                    }) {
+//                                        Icon(
+//                                            painter = painterResource(R.drawable.baseline_home_24),
+//                                            contentDescription = ""
+//                                        )
+//                                    }
+//                                    IconButton(onClick = {
+//                                        Toast.makeText(
+//                                            this@MainActivity,
+//                                            "Location",
+//                                            Toast.LENGTH_SHORT
+//                                        )
+//                                            .show()
+//                                    }) {
+//                                        Icon(
+//                                            painter = painterResource(R.drawable.baseline_fmd_good_24),
+//                                            contentDescription = ""
+//                                        )
+//                                    }
 //
-//                        } else {
-//                            dummyUi(dummyArray = DataManager.data,
-//                                textClick = { count ->
-//                                    launchHealthNeeds(count)
 //                                }
-//                            )
+//
+//                            }
+//
+//                        }
+//                    ) {
+//                        Box(modifier = Modifier.padding(it)) {
+//                            Navgraph(rememberNavController())
+//                            // MyBottomSheetScreen()
 //                        }
 //                    }
-                    Scaffold(topBar = {
-                        TopAppBar(
-                            title = {
-                                Text("Testing App", color = Color.White)
-                            },
-                            colors = TopAppBarDefaults.topAppBarColors(Color.Red),
-                            navigationIcon = {
-                                IconButton(
-                                    onClick = {
-                                        Toast.makeText(this, "Hi", Toast.LENGTH_SHORT).show()
-                                    },
-                                ) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.baseline_format_list_bulleted_24),
-                                        contentDescription = ""
-                                    )
-                                }
-                            },
-                            actions = {
-                                IconButton(onClick = {
-                                    Toast.makeText(
-                                        this@MainActivity,
-                                        "Setting",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.baseline_settings_24),
-                                        contentDescription = "Setting"
-                                    )
-                                }
-                            }
-                        )
-                    },
-                        bottomBar = {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                BottomAppBar(
-                                    contentColor = Color.White,
-                                    containerColor = Color.Blue
-                                ) {
-                                    IconButton(onClick = {
-                                        Toast.makeText(
-                                            this@MainActivity,
-                                            "Home",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                            .show()
-                                    }) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.baseline_home_24),
-                                            contentDescription = ""
-                                        )
-                                    }
-                                    IconButton(onClick = {
-                                        Toast.makeText(
-                                            this@MainActivity,
-                                            "Location",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                            .show()
-                                    }) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.baseline_fmd_good_24),
-                                            contentDescription = ""
-                                        )
-                                    }
-
-                                }
-
-                            }
-
-                        }
-                    ) {
-                        Box(modifier = Modifier.padding(it)) {
-                            Navgraph(rememberNavController())
-                            // MyBottomSheetScreen()
-                        }
-                    }
 
 
                 }
@@ -256,58 +226,6 @@ class MainActivity : ComponentActivity() {
         //  workManager.enqueue(request)
 
     }
-
-
-    private fun launchHealthNeeds(count: Int) {
-        val intent = Intent(this, HealthNeedsActivity::class.java)
-        intent.putExtra("Key", count.toString())
-        startActivity(intent)
-    }
-
-
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun navGraph() {
-    val name = "Raju"
-    val password = null
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "practise1") {
 
-        composable(route = "practise1") {
-            practise1 {
-                println(it)
-                navController.navigate("listingScreen/$name?password=$password")
-            }
-        }
-
-        composable(
-            route = "listingScreen/{name}?password={password}", arguments = listOf(
-                navArgument("name") {
-                    type = NavType.StringType
-                },
-                navArgument("password") {
-                    type = NavType.StringType
-                    defaultValue = "123456"
-                    nullable = true
-                }
-            )
-        ) {
-
-            listingScreen(
-                it.arguments?.getString("name") ?: "",
-                it.arguments?.getString("password") ?: ""
-            ) {
-                navController.navigate("dummyUi/${"tester"}")
-            }
-        }
-        composable(route = "dummyUi/{argument}", arguments = listOf(
-            navArgument(name = "argument") {
-                type = NavType.StringType
-            }
-        )) {
-            dummyUi(DataManager.data) {}
-        }
-    }
-}
