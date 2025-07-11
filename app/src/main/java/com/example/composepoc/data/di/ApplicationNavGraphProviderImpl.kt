@@ -31,12 +31,7 @@ class ApplicationNavGraphProviderImpl : ApplicationNavGraphProvider {
     }
 }
 
-fun NavGraphBuilder.launcherGraph(navHostController: NavHostController)
-//    navigation(
-//        route = NavGraphRoute.HOME,
-//        startDestination = NavigationBase.PRODUCT_LIST.destination
-//    )
-{
+fun NavGraphBuilder.launcherGraph(navHostController: NavHostController) {
     ReuseComposable(route = NavigationBase.PRODUCT_LIST.destination) {
         val viewModel: ProductListVewModel = hiltViewModel()
         listingScreen(
@@ -46,7 +41,7 @@ fun NavGraphBuilder.launcherGraph(navHostController: NavHostController)
     }
 
     ReuseComposable(
-        route = Route.PRACTISE_UI + "?${Arguments.USER_ID}={USER_ID}"+"?${Arguments.TITLE}={TITLE}"+"?${Arguments.DESCRIPTION}={DESCRIPTION}",
+        route = Route.PRACTISE_UI + "?${Arguments.USER_ID}={USER_ID}" + "?${Arguments.TITLE}={TITLE}" + "?${Arguments.DESCRIPTION}={DESCRIPTION}",
         arguments =
         listOf(
             navArgument(Arguments.USER_ID) {
@@ -65,14 +60,16 @@ fun NavGraphBuilder.launcherGraph(navHostController: NavHostController)
         route = Route.Dummy_DYNAMIC_UI
     ) {
         ReuseComposable(route = Route.Dummy_UI) {
-            val viewModel = it.getSharedViewModel<CommonViewModel>(navController = navHostController)
+            val viewModel =
+                it.getSharedViewModel<CommonViewModel>(navController = navHostController)
             dummyUi(
                 viewModel::onEvent,
                 viewModel
             )
         }
         ReuseComposable(route = Route.DYNAMIC_UI) {
-            val viewModel = it.getSharedViewModel<CommonViewModel>(navController = navHostController)
+            val viewModel =
+                it.getSharedViewModel<CommonViewModel>(navController = navHostController)
             DynamiCUi(
                 viewModel::onEvent,
                 viewModel
