@@ -1,4 +1,4 @@
-package com.example.composepoc.view
+package com.example.composepoc.view.reuse
 
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text

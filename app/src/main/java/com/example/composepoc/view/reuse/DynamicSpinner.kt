@@ -1,4 +1,4 @@
-package com.example.composepoc.view
+package com.example.composepoc.view.reuse
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,7 +6,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.viewpager.widget.ViewPager.DecorView
 import com.example.composepoc.utils.IntAction
 
 

@@ -17,10 +17,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.example.composepoc.presentation.state.ProductDetailsEvent
 import com.example.composepoc.presentation.viewmodel.CommonDataEvent
 import com.example.composepoc.presentation.viewmodel.CommonViewModel
-import com.example.composepoc.presentation.viewmodel.ProductListVewModel
+import com.example.composepoc.view.reuse.ButtonUi
+import com.example.composepoc.view.reuse.DynamicCard
+import com.example.composepoc.view.reuse.DynamicText
+import com.example.composepoc.view.reuse.TWSpinner
+import com.example.composepoc.view.reuse.TWTextField
 
 @Composable
 fun DynamiCUi(

@@ -1,4 +1,4 @@
-package com.example.composepoc.view
+package com.example.composepoc.view.reuse
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CornerSize
