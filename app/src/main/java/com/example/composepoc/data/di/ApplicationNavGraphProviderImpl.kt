@@ -14,10 +14,12 @@ import com.example.composepoc.navgraph.ReuseComposable
 import com.example.composepoc.navgraph.Route
 import com.example.composepoc.navgraph.getSharedViewModel
 import com.example.composepoc.presentation.viewmodel.CommonViewModel
+import com.example.composepoc.presentation.viewmodel.LoginViewModel
 import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 import com.example.composepoc.view.DynamiCUi
 import com.example.composepoc.view.dummyUi
 import com.example.composepoc.view.listingScreen
+import com.example.composepoc.view.loginScreen
 import com.example.composepoc.view.practise1
 
 class ApplicationNavGraphProviderImpl : ApplicationNavGraphProvider {
@@ -32,7 +34,15 @@ class ApplicationNavGraphProviderImpl : ApplicationNavGraphProvider {
 }
 
 fun NavGraphBuilder.launcherGraph(navHostController: NavHostController) {
-    ReuseComposable(route = NavigationBase.PRODUCT_LIST.destination) {
+    ReuseComposable(route = NavigationBase.LOGIN.destination) {
+        val viewModel: LoginViewModel = hiltViewModel()
+        loginScreen(
+            viewModel::onEvent,
+            viewModel
+        )
+    }
+
+    ReuseComposable(route = Route.PRODUCT_LIST) {
         val viewModel: ProductListVewModel = hiltViewModel()
         listingScreen(
             viewModel::onEvent,

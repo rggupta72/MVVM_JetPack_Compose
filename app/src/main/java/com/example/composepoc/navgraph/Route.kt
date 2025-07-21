@@ -16,6 +16,7 @@ object ScreenName {
 
 
     const val HOME = "home"
+    const val LOGIN = "login"
 }
 
 object Route {
@@ -24,6 +25,7 @@ object Route {
     const val Dummy_DYNAMIC_UI = "dummyDynamicUi"
     const val Dummy_UI = "dummyUi"
     const val DYNAMIC_UI = "dynamicUi"
+    const val LOGIN = "login"
 
     object Control {
         const val POP_BACK_STACK = "close"

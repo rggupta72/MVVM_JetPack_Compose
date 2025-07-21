@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.composepoc.core.common.UiState
 import com.example.composepoc.domain.usecase.GetProductDetailUseCase
 import com.example.composepoc.presentation.state.ProductDetailState
-import com.example.composepoc.presentation.state.ProductDetailsEvent
+import com.example.composepoc.presentation.event.ProductDetailsEvent
 import com.example.composepoc.utils.SharedEventBus
 import com.example.composepoc.utils.SharedUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel

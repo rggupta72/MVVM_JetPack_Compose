@@ -14,7 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-fun higherOderFunctionTakeAsParameterOrReturnAsParameter(a: Int, b: Int, calculate:(Int,Int)->Int):Int{
+fun higherOderFunctionTakeAsParameterOrReturnAsParameter(a: Int, b: Int, calculate:(a:Int,b:Int)->Int):Int{
 
     return calculate(a,b)
 }
@@ -41,11 +41,17 @@ fun main() {
     println(abc)
     println(higherOderFunctionTakeAsParameterOrReturnAsParameter(5, 3) { a, b -> a * b })
     println(higherOderFunctionTakeAsParameter(5, 3, ::add))
-
+    abc(onClick={
+        println("Raju")
+    })
     println(lambdaExpression2(2,3))
     for ((index,element) in array.withIndex()){
       println("$index $element")
     }
+}
+
+fun abc(onClick:()->Unit){
+    onClick()
 }
 
 @Composable

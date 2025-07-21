@@ -58,7 +58,7 @@ open class BaseActivity : AppCompatActivity() {
                             navController.navigate(it.destination, it.navOptions)
                         }
                     } catch (e: Exception) {
-                        Timber.d("Exception", e.toString())
+                        Timber.d("Navigation Exception", e.toString())
                         navToHome(navController)
                     }
 

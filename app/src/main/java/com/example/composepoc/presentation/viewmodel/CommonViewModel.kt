@@ -2,6 +2,8 @@ package com.example.composepoc.presentation.viewmodel
 
 import com.example.composepoc.navgraph.NavigationManager
 import com.example.composepoc.navgraph.Route
+import com.example.composepoc.presentation.event.CommonDataEvent
+import com.example.composepoc.presentation.state.CommonDataState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 

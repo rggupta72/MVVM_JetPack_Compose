@@ -10,7 +10,7 @@ import com.example.composepoc.navgraph.Arguments
 import com.example.composepoc.navgraph.NavigationManager
 import com.example.composepoc.navgraph.Route
 import com.example.composepoc.presentation.state.HealthNeedsState
-import com.example.composepoc.presentation.state.ProductDetailsEvent
+import com.example.composepoc.presentation.event.ProductDetailsEvent
 import com.example.composepoc.presentation.state.ProductListState
 import com.example.composepoc.utils.SharedEventBus
 import com.example.composepoc.utils.SharedUiEvent
@@ -85,7 +85,7 @@ class ProductListVewModel @Inject constructor(
 
     override fun onEvent(event: ProductDetailsEvent) {
         when (event) {
-            is ProductDetailsEvent.ProductList -> {
+            is ProductDetailsEvent.ProductDetails -> {
                 navigationManager.navigate(Route.PRACTISE_UI+ "?${Arguments.USER_ID} = ${event.productCode}" +"?${Arguments.TITLE} = ${event.title}"+"?${Arguments.DESCRIPTION} = ${event.description}")
             }
             is ProductDetailsEvent.PractiseUi -> {

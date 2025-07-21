@@ -20,7 +20,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
@@ -52,7 +51,7 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.example.composepoc.R
-import com.example.composepoc.presentation.state.ProductDetailsEvent
+import com.example.composepoc.presentation.event.ProductDetailsEvent
 import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 
 @Composable

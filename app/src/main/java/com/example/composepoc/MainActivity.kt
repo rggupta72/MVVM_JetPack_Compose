@@ -78,7 +78,7 @@ class MainActivity : BaseActivity() {
                         navController = parentNavController,
                         graph = applicationNavGraphProvider.getApplicationNavGraph(
                             navController = parentNavController,
-                            startDestination = NavigationBase.PRODUCT_LIST.destination
+                            startDestination = NavigationBase.LOGIN.destination
                         ),
                         modifier = Modifier.fillMaxSize()
                     )

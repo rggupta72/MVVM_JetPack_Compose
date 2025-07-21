@@ -9,5 +9,6 @@ sealed class NavRoute(val path: String) {
     object Setting : NavRoute("setting")
 
     object DynamicUi : NavRoute("dynamic")
+    object Login : NavRoute("login")
 
 }

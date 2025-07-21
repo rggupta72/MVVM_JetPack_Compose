@@ -55,6 +55,12 @@ object NavigationBase {
         )
     }
 
+    val LOGIN =
+        BaseNavigationCommand(
+            destination = Route.LOGIN,
+            screenName = ScreenName.LOGIN
+        )
+
     val PRODUCT_LIST =
         BaseNavigationCommand(
             destination = Route.PRODUCT_LIST,

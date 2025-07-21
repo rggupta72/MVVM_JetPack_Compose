@@ -1,7 +1,7 @@
-package com.example.composepoc.presentation.state
+package com.example.composepoc.presentation.event
 
 sealed class ProductDetailsEvent {
-    data class ProductList(
+    data class ProductDetails(
         val productCode: Int,
         val title: String,
         val description: String,

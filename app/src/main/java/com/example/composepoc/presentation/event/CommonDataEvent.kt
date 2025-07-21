@@ -1,4 +1,4 @@
-package com.example.composepoc.presentation.viewmodel
+package com.example.composepoc.presentation.event
 
 sealed class CommonDataEvent {
     data object DynamicUi : CommonDataEvent()

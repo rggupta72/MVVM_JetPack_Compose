@@ -51,7 +51,7 @@ import com.example.composepoc.a
 import com.example.composepoc.b
 import com.example.composepoc.domain.DataManager
 import com.example.composepoc.domain.model.DummyArray
-import com.example.composepoc.presentation.viewmodel.CommonDataEvent
+import com.example.composepoc.presentation.event.CommonDataEvent
 import com.example.composepoc.presentation.viewmodel.CommonViewModel
 import com.example.composepoc.utils.S_ELEVATION
 import kotlinx.coroutines.delay

@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.composepoc.presentation.state.ProductDetailsEvent
+import com.example.composepoc.presentation.event.ProductDetailsEvent
 import com.example.composepoc.presentation.viewmodel.ProductListVewModel
 
 @Composable
@@ -44,7 +44,7 @@ fun listingScreen(
             LazyColumn {
                 items(it) { item ->
                     listItem(item) { product ->
-                        onEvent(ProductDetailsEvent.ProductList(product.id, product.title, product.description))
+                        onEvent(ProductDetailsEvent.ProductDetails(product.id, product.title, product.description))
                         Toast.makeText(context, product.title, Toast.LENGTH_SHORT).show()
                     }
                 }

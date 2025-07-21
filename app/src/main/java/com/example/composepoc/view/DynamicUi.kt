@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.example.composepoc.presentation.viewmodel.CommonDataEvent
+import com.example.composepoc.presentation.event.CommonDataEvent
 import com.example.composepoc.presentation.viewmodel.CommonViewModel
 import com.example.composepoc.view.reuse.ButtonUi
 import com.example.composepoc.view.reuse.DynamicCard
