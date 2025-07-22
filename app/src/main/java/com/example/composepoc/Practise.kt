@@ -19,11 +19,6 @@ fun higherOderFunctionTakeAsParameterOrReturnAsParameter(a: Int, b: Int, calcula
     return calculate(a,b)
 }
 
-fun higherOderFunctionTakeAsParameter(a: Int, b: Int, calculate:(Int,Int)->Int){
-    println(calculate(a,b))
-
-}
-
 fun add(a:Int,b:Int): Int{
 
     return a+b
@@ -40,7 +35,7 @@ fun main() {
     val abc:String? = null
     println(abc)
     println(higherOderFunctionTakeAsParameterOrReturnAsParameter(5, 3) { a, b -> a * b })
-    println(higherOderFunctionTakeAsParameter(5, 3, ::add))
+    println(higherOderFunctionTakeAsParameterOrReturnAsParameter(5, 3, ::add))
     abc(onClick={
         println("Raju")
     })
@@ -48,6 +43,8 @@ fun main() {
     for ((index,element) in array.withIndex()){
       println("$index $element")
     }
+
+    println()
 }
 
 fun abc(onClick:()->Unit){
@@ -85,9 +82,6 @@ fun MyButtonComponent() {
         Text("Save")
     }
 }
-
-
-
 
 fun a(){
     Log.d("Print a", "Message of a")

@@ -51,7 +51,7 @@ fun NavGraphBuilder.launcherGraph(navHostController: NavHostController) {
     }
 
     ReuseComposable(
-        route = Route.PRACTISE_UI + "?${Arguments.USER_ID}={USER_ID}" + "?${Arguments.TITLE}={TITLE}" + "?${Arguments.DESCRIPTION}={DESCRIPTION}",
+        route = Route.PRACTISE_UI + "?${Arguments.USER_ID}={${Arguments.USER_ID}}" + "?${Arguments.TITLE}={${Arguments.TITLE}}" + "?${Arguments.DESCRIPTION}={${Arguments.DESCRIPTION}}",
         arguments =
         listOf(
             navArgument(Arguments.USER_ID) {
