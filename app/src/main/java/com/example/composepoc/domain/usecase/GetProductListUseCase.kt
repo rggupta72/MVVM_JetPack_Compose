@@ -1,8 +1,8 @@
 package com.example.composepoc.domain.usecase
 
 import com.example.composepoc.core.common.UiState
-import com.example.composepoc.data.respository.RepositoryImpl
 import com.example.composepoc.domain.model.ProductItem
+import com.example.composepoc.domain.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 import javax.inject.Inject
 
-class GetProductListUseCase @Inject constructor(private val repositoryImpl: RepositoryImpl) {
+class GetProductListUseCase @Inject constructor(private val repositoryImpl: Repository) {
 
     fun invoke(): Flow<UiState<List<ProductItem>>> = flow {
         emit(UiState.Loading())
