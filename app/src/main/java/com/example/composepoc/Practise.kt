@@ -30,6 +30,16 @@ val array = arrayOf(1,2,3,4)
 val lambdaExpression1: (Int,Int)->Int={a,b-> a+b}
 val lambdaExpression2={a:Int,b:Int-> a+b}
 
+data class Person(val name: String, val age: Int) : Comparable<Person> {
+    // Primary sort by age, secondary by name if ages are equal
+    override fun compareTo(other: Person): Int {
+        return if (this.age != other.age) {
+            this.age.compareTo(other.age) // Sort by age (ascending)
+        } else {
+            this.name.compareTo(other.name) // Sort by name (ascending) if ages are the same
+        }
+    }
+}
 
 fun main() {
     val abc:String? = null
@@ -44,7 +54,16 @@ fun main() {
       println("$index $element")
     }
 
-    println()
+    val people = listOf(
+        Person("Alice", 30),
+        Person("Bob", 25),
+        Person("Charlie", 30),
+        Person("Diana", 25)
+    )
+
+    val sortedPeople = people.sorted() // Uses the natural order defined by compareTo
+    println("Sorted by natural order (age, then name): $sortedPeople")
+
 }
 
 fun abc(onClick:()->Unit){

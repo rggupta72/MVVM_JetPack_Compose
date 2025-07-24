@@ -426,7 +426,8 @@ fun GmwInterstitialUi(
                 .wrapContentSize()
                 .focusable(true)
                 .padding(0.dp, M_VERTICAL_SPACING, 0.dp, M_VERTICAL_SPACING)
-                .align(Alignment.CenterHorizontally),
+                .align(Alignment.CenterHorizontally)
+                .testTag("Close"),
             colors =
             ButtonDefaults.buttonColors(containerColor = Color.Transparent),
         ) {
