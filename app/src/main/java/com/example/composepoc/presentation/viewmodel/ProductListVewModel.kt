@@ -35,7 +35,7 @@ class ProductListVewModel @Inject constructor(
     val healthNeedsList = _healthNeedsList.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch {
             productListUseCase.invoke().collectLatest {
                 when (it) {
                     is UiState.Loading -> {
