@@ -1,6 +1,7 @@
 package com.example.composepoc.presentation.viewmodel
 
 import android.os.Bundle
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
 import com.example.composepoc.adapter.HealthNeedItemViewState
 import com.example.composepoc.adapter.getGmwHubViewStateList
@@ -33,6 +34,13 @@ class ProductListVewModel @Inject constructor(
 
     private val _healthNeedsList = MutableStateFlow(HealthNeedsState())
     val healthNeedsList = _healthNeedsList.asStateFlow()
+
+    @VisibleForTesting
+    internal fun startLoading(){
+        updateState {
+            it.copy(isLoading = true)
+        }
+    }
 
     init {
         viewModelScope.launch {

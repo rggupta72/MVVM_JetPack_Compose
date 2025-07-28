@@ -1,6 +1,5 @@
 package com.example.composepoc.presentation.viewmodel
 
-import app.cash.turbine.test
 import com.example.composepoc.MainDispatcherRule
 import com.example.composepoc.core.common.UiState
 import com.example.composepoc.domain.model.ProductItem
@@ -12,7 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -32,6 +31,7 @@ class ProductListVewModelTest {
     private lateinit var sharedEventBus: SharedEventBus // Mocked, not used here
     private lateinit var viewModel: ProductListVewModel
     private val testDispatcher get() = mainDispatcherRule.testDispatcher // Convenience accessor
+
     @Before
     fun setUp() {
         mockProductListUseCase = mock()
@@ -61,24 +61,68 @@ class ProductListVewModelTest {
     }
 
     @Test
-    fun `when useCase emits Loading, uiState reflects loading`() =
-        runTest { // runTest uses the testDispatcher from the rule
-            // Arrange
-            val useCaseEmitter = MutableSharedFlow<UiState<List<ProductItem>>>()
-            initializeViewModel(useCaseEmitter.asSharedFlow())
+    fun `when useCase emits Loading, uiState reflects loading`() { // runTest uses the testDispatcher from the rule
+        // Arrange
+        val useCaseEmitter = MutableSharedFlow<UiState<List<ProductItem>>>()
+        initializeViewModel(useCaseEmitter.asSharedFlow())
 
-            // Act
-            useCaseEmitter.emit(UiState.Loading())
-            testDispatcher.scheduler.advanceUntilIdle() // Let the init block's coroutine process the emission
+        // Act
+        viewModel.startLoading()
+        testDispatcher.scheduler.advanceUntilIdle() // Let the init block's coroutine process the emission
 
-            // Assert
-            viewModel.uiState.test {
-                val emittedState = awaitItem() // Get the current state
-                Assert.assertTrue("isLoading should be true", emittedState.isLoading)
-                Assert.assertNull("Data should be null during loading", emittedState.data)
-                Assert.assertNull("Error should be null during loading", emittedState.error)
+        val expectedInitialState = ProductListState(true, null, "", 0)
+        Assert.assertEquals(expectedInitialState, viewModel.uiState.value)
+        verify(mockProductListUseCase).invoke() // Verify use case was
+    }
 
-                cancelAndConsumeRemainingEvents() // Clean up Turbine
-            }
-        }
+    @Test
+    fun `when useCase emits Success, uiState reflects success`() { // runTest uses the testDispatcher from the rule
+        val expectedProductItemList = listOf(
+            ProductItem(
+                1,
+                "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg",
+                "Product A",
+                "Hi"
+            )
+        )
+        // Arrange
+        val useCaseEmitter = MutableSharedFlow<UiState<List<ProductItem>>>()
+        initializeViewModel(useCaseEmitter.asSharedFlow())
+        whenever(mockProductListUseCase.invoke()).thenReturn(
+            flowOf(
+                UiState.Success(
+                    expectedProductItemList
+                )
+            )
+        )
+        // Act
+        testDispatcher.scheduler.advanceUntilIdle() // Let the init block's coroutine process the emission
+
+        val expectedInitialState =
+            ProductListState(isLoading = false, expectedProductItemList, "", 0)
+        Assert.assertEquals(expectedInitialState, viewModel.uiState.value)
+        verify(mockProductListUseCase).invoke() // Verify use case was
+    }
+
+    @Test
+    fun `when useCase emits Error, uiState reflects error`() { // runTest uses the testDispatcher from the rule
+        // Arrange
+        val useCaseEmitter = MutableSharedFlow<UiState<List<ProductItem>>>()
+        initializeViewModel(useCaseEmitter.asSharedFlow())
+        val errorMessage = "Network error"
+        whenever(mockProductListUseCase.invoke()).thenReturn(
+            flowOf(
+                UiState.Error(
+                    message = errorMessage
+                )
+            )
+        )
+        // Act
+        testDispatcher.scheduler.advanceUntilIdle() // Let the init block's coroutine process the emission
+
+        val expectedInitialState =
+            ProductListState(isLoading = false, null, errorMessage, 0)
+        Assert.assertEquals(expectedInitialState, viewModel.uiState.value)
+        verify(mockProductListUseCase).invoke() // Verify use case was
+    }
 }
