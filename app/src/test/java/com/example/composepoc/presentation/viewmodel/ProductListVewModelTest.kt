@@ -4,7 +4,10 @@ import com.example.composepoc.MainDispatcherRule
 import com.example.composepoc.core.common.UiState
 import com.example.composepoc.domain.model.ProductItem
 import com.example.composepoc.domain.usecase.GetProductListUseCase
+import com.example.composepoc.navgraph.Arguments
 import com.example.composepoc.navgraph.NavigationManager
+import com.example.composepoc.navgraph.Route
+import com.example.composepoc.presentation.event.ProductDetailsEvent
 import com.example.composepoc.presentation.state.ProductListState
 import com.example.composepoc.utils.SharedEventBus
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -124,5 +127,42 @@ class ProductListVewModelTest {
             ProductListState(isLoading = false, null, errorMessage, 0)
         Assert.assertEquals(expectedInitialState, viewModel.uiState.value)
         verify(mockProductListUseCase).invoke() // Verify use case was
+    }
+
+    @Test
+    fun `onEvent ProductDetails - navigates to PractiseUI with correct arguments`() {
+        val useCaseEmitter = MutableSharedFlow<UiState<List<ProductItem>>>()
+        initializeViewModel(useCaseEmitter.asSharedFlow())
+        // Arrange
+        val productCode = 123
+        val title = "Test Product"
+        val description = "This is a test description."
+        val event = ProductDetailsEvent.ProductDetails(productCode, title, description)
+
+        val expectedRoute = "${Route.PRACTISE_UI}?${Arguments.USER_ID} = ${productCode}?${Arguments.TITLE} = ${title}?${Arguments.DESCRIPTION} = ${description}"
+
+        // Act
+        viewModel.onEvent(event)
+
+        // Assert
+        // Verify that navigationManager.navigate() was called with the expected route string
+        verify(mockNavigationManager).navigate(expectedRoute)
+    }
+
+    @Test
+    fun `onEvent ProductDetails - navigates to DYNAMIC_UI with correct arguments`() {
+        val useCaseEmitter = MutableSharedFlow<UiState<List<ProductItem>>>()
+        initializeViewModel(useCaseEmitter.asSharedFlow())
+        // Arrange
+        val event = ProductDetailsEvent.PractiseUi
+
+        val expectedRoute = Route.DYNAMIC_UI
+
+        // Act
+        viewModel.onEvent(event)
+
+        // Assert
+        // Verify that navigationManager.navigate() was called with the expected route string
+        verify(mockNavigationManager).navigate(expectedRoute)
     }
 }
